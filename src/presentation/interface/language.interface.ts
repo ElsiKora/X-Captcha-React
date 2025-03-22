@@ -1,4 +1,5 @@
 export interface ILanguage {
+	brandName: string;
 	errorDuringVerification: string;
 	failedToLoadChallenge: string;
 	loading: string;

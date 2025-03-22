@@ -215,7 +215,7 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, heig
 							/>
 						</div>
 						<div className={styles["x-captcha-text"]}>{translate("notRobot")}</div>
-						<div className={styles["x-captcha-brand"]}>{"X-Captcha"}</div>
+						<div className={styles["x-captcha-brand"]}>{translate("brandName")}</div>
 
 						{/* Verifying overlay with loading animation */}
 						<div className={`${styles["x-captcha-verifying-overlay"]} ${hasFakeDelay ? styles["x-captcha-verifying-overlay-visible"] : ""}`}>

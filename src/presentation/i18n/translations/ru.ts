@@ -4,6 +4,7 @@ import type { ILanguage } from "../../interface";
  * Russian translations for the X-Captcha component
  */
 export const RU: ILanguage = {
+	brandName: "X-Captcha",
 	errorDuringVerification: "Ошибка во время проверки",
 	failedToLoadChallenge: "Не удалось загрузить капчу",
 	loading: "Загрузка капчи...",

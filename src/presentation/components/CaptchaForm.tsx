@@ -63,6 +63,7 @@ export const CaptchaForm: React.FC<ICaptchaFormProperties> = ({ apiUrl, buttonCo
 	return (
 		<form className={`${styles["x-captcha-form"]} ${className}`} onSubmit={handleSubmit}>
 			{/* Children elements (form fields) */}
+			{/* eslint-disable-next-line @elsikora/react/1/no-useless-fragment */}
 			{children ? <div className={styles["x-captcha-children-container"]}>{children}</div> : <></>}
 
 			{/* Captcha widget */}

@@ -57,9 +57,9 @@
 		"@commitlint/cli": "^19.8.0",
 		"@commitlint/config-conventional": "^19.8.0",
 		"@elsikora/commitizen-plugin-commitlint-ai": "^1.0.0",
-		"@elsikora/eslint-config": "^3.7.10",
-		"@eslint-react/eslint-plugin": "^1.37.0",
-		"@rollup/plugin-typescript": "^11.1.6",
+		"@elsikora/eslint-config": "^3.7.11",
+		"@eslint-react/eslint-plugin": "^1.37.3",
+		"@rollup/plugin-typescript": "^12.1.2",
 		"@saithodev/semantic-release-backmerge": "^4.0.1",
 		"@semantic-release/changelog": "^6.0.3",
 		"@semantic-release/commit-analyzer": "^13.0.1",
@@ -67,11 +67,11 @@
 		"@semantic-release/github": "^11.0.1",
 		"@semantic-release/npm": "^12.0.1",
 		"@semantic-release/release-notes-generator": "^14.0.3",
-		"@types/react": "^18.2.70",
-		"@types/react-dom": "^18.2.22",
+		"@types/react": "^19.0.12",
+		"@types/react-dom": "^19.0.4",
 		"commitizen": "^4.3.1",
 		"conventional-changelog-conventionalcommits": "^8.0.0",
-		"eslint": "^9.22.0",
+		"eslint": "^9.23.0",
 		"eslint-plugin-i18next": "^6.1.1",
 		"eslint-plugin-jsx-a11y": "^6.10.2",
 		"eslint-plugin-n": "^17.16.2",
@@ -79,10 +79,10 @@
 		"eslint-plugin-react": "^7.37.4",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.5.0",
-		"postcss": "^8.4.35",
+		"postcss": "^8.5.3",
 		"prettier": "^3.5.3",
-		"rimraf": "^5.0.5",
-		"rollup": "^4.13.0",
+		"rimraf": "^6.0.1",
+		"rollup": "^4.36.0",
 		"rollup-plugin-generate-package-json": "^3.2.0",
 		"rollup-plugin-postcss": "^4.0.2",
 		"semantic-release": "^24.2.3",
@@ -92,10 +92,10 @@
 		"stylelint-config-standard-scss": "^14.0.0",
 		"stylelint-order": "^6.0.4",
 		"stylelint-prettier": "^5.0.3",
-		"typescript": "^5.3.3"
+		"typescript": "^5.8.2"
 	},
 	"peerDependencies": {
-		"react": "^17.0.0 || ^18.0.0",
-		"react-dom": "^17.0.0 || ^18.0.0"
+		"react": "^17.0.0 || ^18.0.0 || ^19.0.0",
+		"react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0"
 	}
 }

@@ -4,6 +4,7 @@ import type { ILanguage } from "../../interface";
  * English translations for the X-Captcha component
  */
 export const EN: ILanguage = {
+	brandName: "X-Captcha",
 	errorDuringVerification: "Error during verification",
 	failedToLoadChallenge: "Failed to load captcha challenge",
 	loading: "Loading captcha...",
