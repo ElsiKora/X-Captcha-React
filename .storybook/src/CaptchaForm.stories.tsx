@@ -66,7 +66,7 @@ const meta: Meta<typeof CaptchaForm> = {
 		language: {
 			control: "select",
 			description: "Language for form text (auto-detects if not provided)",
-			options: ["en", "ru", "fr", "de", "es"],
+			options: ["ar", "bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "hi", "hu", "id", "it", "ja", "ko", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh"],
 			table: {
 				defaultValue: { summary: "Auto-detected" },
 				type: { summary: "string" },

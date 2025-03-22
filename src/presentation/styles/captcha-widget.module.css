@@ -36,7 +36,7 @@
 	justify-content: center;
 	width: 100%;
 	height: 100%;
-	color: var(--x-captcha-text);
+	color: var(--x-captcha-primary);
 	font-weight: 500;
 }
 
@@ -54,7 +54,7 @@
 .x-captcha-error {
 	display: flex;
 	flex-direction: column;
-	gap: 7px;
+	gap: 10px;
 	align-items: center;
 	justify-content: center;
 	width: 100%;
@@ -175,7 +175,7 @@
 .x-captcha-text {
 	color: var(--x-captcha-primary);
 	font-weight: 500;
-	font-size: var(--x-captcha-font-sm);
+	font-size: var(--x-captcha-font-md);
 }
 
 .x-captcha-brand {
@@ -203,6 +203,8 @@
 		opacity 0.3s ease,
 		visibility 0.3s ease;
 }
+
+/* Styling for the verifying state is now redundant since we changed the base color */
 
 .x-captcha-verifying-overlay-visible {
 	visibility: visible;

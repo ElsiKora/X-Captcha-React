@@ -1,4 +1,5 @@
 /* eslint-disable @elsikora/typescript/no-magic-numbers */
+// eslint-disable-next-line @elsikora/react/1/naming-convention/filename-extension
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { fn } from "@storybook/test";
@@ -67,7 +68,7 @@ const meta: Meta<typeof CaptchaWidget> = {
 		language: {
 			control: "select",
 			description: "Language for the widget text (auto-detects if not provided)",
-			options: ["en", "ru", "fr", "de", "es"],
+			options: ["ar", "bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "hi", "hu", "id", "it", "ja", "ko", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh"],
 			table: {
 				defaultValue: { summary: "Auto-detected" },
 				type: { summary: "string" },
@@ -142,15 +143,19 @@ export default meta;
  */
 export const Default: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: "http://127.0.0.1:4000/api/captcha",
 		height: 74,
+
+		language: "uk",
+
 		onError: fn((error: unknown) => {
 			console.error("Captcha verification error:", error);
 		}),
+
 		onVerify: fn((token: string) => {
 			console.log("Captcha verified with token:", token);
 		}),
-		themeColor: "#4285F4",
+		themeColor: "#f142f5",
 		width: 300,
 	},
 	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("en"), withContainer(400, 200), withThemeColor("#4285F4")],
@@ -176,6 +181,7 @@ export const GreenTheme: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: "http://127.0.0.1:3000/api/captcha",
 		height: 74,
+		language: "uk",
 		themeColor: "#34A853",
 		width: 300,
 	},
