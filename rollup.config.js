@@ -4,7 +4,6 @@ import typescript from "@rollup/plugin-typescript";
 import generatePackageJson from "rollup-plugin-generate-package-json";
 import postcss from "rollup-plugin-postcss";
 
-// Mark React and React DOM as external dependencies
 const external = ["react", "react-dom", "@elsikora/x-captcha-client", "react/jsx-runtime"];
 
 export default [
