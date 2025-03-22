@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">X-Captcha-React 🛡️</h1>
-<p align="center"><em>Elegant React components for seamless X-Captcha integration</em></p>
+<p align="center"><em>Elegant React components for X-Captcha integration</em></p>
 
 <p align="center">
     <a aria-label="ElsiKora logo" href="https://elsikora.com">
