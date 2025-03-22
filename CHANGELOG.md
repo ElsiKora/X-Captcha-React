@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/ElsiKora/X-Captcha-React/compare/v1.0.0...v1.1.0) (2025-03-22)
+
+
+### Features
+
+* **i18n:** add support for multiple languages ([898f409](https://github.com/ElsiKora/X-Captcha-React/commit/898f409523d5ee1beb838d08ebefd1d92cddc7c1))
+
 # 1.0.0 (2025-03-22)
 
 
