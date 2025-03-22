@@ -57,8 +57,8 @@
 
 /* Button states */
 .x-captcha-submit-button-active {
-	color: white;
-	background-color: var(--x-captcha-primary);
+	color: var(--x-captcha-submit-btn-text);
+	background-color: var(--x-captcha-submit-btn-bg);
 	box-shadow: var(--x-captcha-shadow);
 	cursor: pointer;
 }
@@ -76,5 +76,5 @@
 }
 
 .x-captcha-submit-button-focus {
-	outline: 2px solid rgb(66 133 244 / 25%);
+	outline: 2px solid var(--x-captcha-submit-btn-outline);
 }

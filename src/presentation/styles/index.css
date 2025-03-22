@@ -22,6 +22,16 @@ html,
 	--x-captcha-disabled: #9e9e9e;
 	--x-captcha-disabled-bg: #e0e0e0;
 
+	/* Additional theme color variables */
+	--x-captcha-checkmark: #fff;
+	--x-captcha-btn-bg: #f8f8f8;
+	--x-captcha-btn-text: var(--x-captcha-text);
+	--x-captcha-btn-hover-bg: #f0f0f0;
+	--x-captcha-submit-btn-bg: var(--x-captcha-primary);
+	--x-captcha-submit-btn-text: #fff;
+	--x-captcha-submit-btn-outline: rgb(66 133 244 / 25%);
+	--x-captcha-spinner-border: var(--x-captcha-primary) transparent var(--x-captcha-primary) var(--x-captcha-primary);
+
 	/* Shadows */
 	--x-captcha-shadow-sm: 0 1px 3px rgb(0 0 0 / 8%);
 	--x-captcha-shadow: 0 4px 6px rgb(0 0 0 / 5%), 0 1px 3px rgb(0 0 0 / 10%);
@@ -50,6 +60,9 @@ html,
 	/* Transitions */
 	--x-captcha-transition-fast: all 0.2s ease;
 	--x-captcha-transition: all 0.3s ease;
+
+	/* Animations */
+	--x-captcha-spin-animation: x-captcha-spin 1s linear infinite;
 }
 
 /* Animations */

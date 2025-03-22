@@ -1,11 +1,12 @@
-import type { Dispatch, FormEvent, SetStateAction } from "react";
+import type { CSSProperties, Dispatch, FormEvent, SetStateAction } from "react";
 
-import type { ICaptchaFormProperties } from "../interface/captcha-form-properties.interface";
-import type { TTranslateFunction } from "../type/translation-function.type";
+import type { ICaptchaFormProperties } from "../interface";
+import type { TTranslateFunction } from "../type";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import { createTranslator, detectLanguage } from "../i18n";
+import { GenerateThemeVariables } from "../utility";
 
 import { CaptchaWidget } from "./CaptchaWidget";
 
@@ -29,7 +30,15 @@ export const CaptchaForm: React.FC<ICaptchaFormProperties> = ({ apiUrl, buttonCo
 		return createTranslator(detectedLanguage);
 	});
 
-	const actualButtonColor: string | undefined = buttonColor ?? themeColor;
+	// Generate CSS variables from theme props
+	const themeVariables: CSSProperties = useMemo<CSSProperties>(
+		() =>
+			GenerateThemeVariables({
+				buttonColor,
+				themeColor,
+			}),
+		[buttonColor, themeColor],
+	);
 
 	const defaultSubmitText: string = submitButtonText ?? "Submit";
 
@@ -61,7 +70,7 @@ export const CaptchaForm: React.FC<ICaptchaFormProperties> = ({ apiUrl, buttonCo
 	const buttonClasses: string = [styles["x-captcha-submit-button"], token ? styles["x-captcha-submit-button-active"] : styles["x-captcha-submit-button-disabled"], token && isHovering ? styles["x-captcha-submit-button-hover"] : "", token && isFocused ? styles["x-captcha-submit-button-focus"] : ""].filter(Boolean).join(" ");
 
 	return (
-		<form className={`${styles["x-captcha-form"]} ${className}`} onSubmit={handleSubmit}>
+		<form className={`${styles["x-captcha-form"]} ${className}`} onSubmit={handleSubmit} style={themeVariables}>
 			{/* Children elements (form fields) */}
 			{/* eslint-disable-next-line @elsikora/react/1/no-useless-fragment */}
 			{children ? <div className={styles["x-captcha-children-container"]}>{children}</div> : <></>}
@@ -86,7 +95,6 @@ export const CaptchaForm: React.FC<ICaptchaFormProperties> = ({ apiUrl, buttonCo
 			)}
 
 			{/* Submit button */}
-			{}
 			<button
 				className={buttonClasses}
 				disabled={!token}
@@ -102,7 +110,6 @@ export const CaptchaForm: React.FC<ICaptchaFormProperties> = ({ apiUrl, buttonCo
 				onMouseLeave={() => {
 					if (token) setIsHovering(false);
 				}}
-				style={token ? { backgroundColor: actualButtonColor } : undefined}
 				type={"submit"}>
 				{defaultSubmitText}
 			</button>

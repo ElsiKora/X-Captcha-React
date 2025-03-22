@@ -1,5 +1,16 @@
 /* Widget styles */
 
+/* Define spinner animation directly in the module */
+@keyframes x-captcha-spin {
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 /* Widget container */
 .x-captcha-widget {
 	position: relative;
@@ -8,6 +19,7 @@
 	justify-content: center;
 	width: 100%;
 	height: 74px;
+	margin: 0 auto;
 	padding: var(--x-captcha-spacing);
 	overflow: hidden;
 	font-family: var(--x-captcha-font-family);
@@ -32,9 +44,10 @@
 	width: 20px;
 	height: 20px;
 	margin-right: 10px;
-	border: 2px solid var(--x-captcha-primary);
-	border-top-color: transparent;
+	border: 2px solid;
+	border-color: var(--x-captcha-spinner-border);
 	border-radius: 50%;
+	animation: x-captcha-spin 1s linear infinite;
 }
 
 /* Error state */
@@ -55,10 +68,10 @@
 	align-items: center;
 	justify-content: center;
 	padding: var(--x-captcha-spacing-sm) var(--x-captcha-spacing-md);
-	color: var(--x-captcha-text);
+	color: var(--x-captcha-btn-text);
 	font-weight: 500;
 	font-size: var(--x-captcha-font-sm);
-	background-color: #f8f8f8;
+	background-color: var(--x-captcha-btn-bg);
 	border: 1px solid var(--x-captcha-border-light);
 	border-radius: var(--x-captcha-radius);
 	box-shadow: var(--x-captcha-shadow-sm);
@@ -68,7 +81,7 @@
 
 .x-captcha-error-button:hover,
 .x-captcha-error-button:focus {
-	background-color: var(--hover-bg-color, #f0f0f0) !important;
+	background-color: var(--x-captcha-btn-hover-bg) !important;
 }
 
 .x-captcha-error-button-icon {
@@ -129,7 +142,7 @@
 }
 
 .x-captcha-checkmark {
-	color: #fff;
+	color: var(--x-captcha-checkmark);
 	transform: scale(0);
 	opacity: 0;
 	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -160,7 +173,7 @@
 }
 
 .x-captcha-text {
-	color: var(--x-captcha-text);
+	color: var(--x-captcha-primary);
 	font-weight: 500;
 	font-size: var(--x-captcha-font-sm);
 }
@@ -182,7 +195,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: rgb(255 255 255 / 100%);
+	background-color: var(--x-captcha-background);
 	border-radius: 4px;
 	visibility: hidden;
 	opacity: 0;

@@ -1,9 +1,8 @@
 import type { Preview } from "@storybook/react";
 
-import { withContainer, withLanguage, withMockCaptchaClient, withThemeColor } from "../src/stories/decorators";
+import { withContainer, withLanguage, withMockCaptchaClient, withThemeColor } from "./src/Decorators";
 
-// Импортируем основной файл стилей, который содержит все необходимые CSS переменные и стили
-import "../src/presentation/styles/index.css";
+import "./src/presentation/styles/index.css";
 
 const preview: Preview = {
 	decorators: [withContainer(), withLanguage("en"), withMockCaptchaClient(), withThemeColor()],

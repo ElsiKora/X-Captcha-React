@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import React from "react";
 
-import { CaptchaForm } from "../presentation/components/CaptchaForm";
+import { CaptchaForm } from "../../src";
 
 import { ContactFormFields, LoginFormFields, RegistrationFormFields } from "./components/FormFields";
 import { withContainer, withFormInteraction, withFormSubmission, withLanguage, withMockCaptchaClient, withThemeColor } from "./Decorators";

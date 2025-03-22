@@ -1,5 +1,5 @@
 import type { ILanguage } from "../interface";
-import type { TTranslateFunction } from "../type/translation-function.type";
+import type { TTranslateFunction } from "../type";
 
 import { ELanguage } from "../enum";
 

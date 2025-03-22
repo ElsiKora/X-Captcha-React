@@ -1,7 +1,7 @@
 /* eslint-disable @elsikora/typescript/no-magic-numbers */
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { CaptchaWidget } from "../presentation/components/CaptchaWidget";
+import { CaptchaWidget } from "../../src";
 
 import { withContainer, withLanguage, withMockCaptchaClient, withThemeColor } from "./Decorators";
 
