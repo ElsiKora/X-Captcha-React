@@ -37,8 +37,120 @@ export function detectLanguage(): ELanguage {
 	const browserLang: string = navigator.language.toLowerCase();
 
 	// Check if it starts with any of our supported languages
+	if (browserLang.startsWith("ar")) {
+		return ELanguage.AR;
+	}
+
+	if (browserLang.startsWith("bg")) {
+		return ELanguage.BG;
+	}
+
+	if (browserLang.startsWith("cs")) {
+		return ELanguage.CS;
+	}
+
+	if (browserLang.startsWith("da")) {
+		return ELanguage.DA;
+	}
+
+	if (browserLang.startsWith("de")) {
+		return ELanguage.DE;
+	}
+
+	if (browserLang.startsWith("el")) {
+		return ELanguage.EL;
+	}
+
+	if (browserLang.startsWith("es")) {
+		return ELanguage.ES;
+	}
+
+	if (browserLang.startsWith("fi")) {
+		return ELanguage.FI;
+	}
+
+	if (browserLang.startsWith("fr")) {
+		return ELanguage.FR;
+	}
+
+	if (browserLang.startsWith("he")) {
+		return ELanguage.HE;
+	}
+
+	if (browserLang.startsWith("hi")) {
+		return ELanguage.HI;
+	}
+
+	if (browserLang.startsWith("hu")) {
+		return ELanguage.HU;
+	}
+
+	if (browserLang.startsWith("id")) {
+		return ELanguage.ID;
+	}
+
+	if (browserLang.startsWith("it")) {
+		return ELanguage.IT;
+	}
+
+	if (browserLang.startsWith("ja")) {
+		return ELanguage.JA;
+	}
+
+	if (browserLang.startsWith("ko")) {
+		return ELanguage.KO;
+	}
+
+	if (browserLang.startsWith("nl")) {
+		return ELanguage.NL;
+	}
+
+	if (browserLang.startsWith("no")) {
+		return ELanguage.NO;
+	}
+
+	if (browserLang.startsWith("pl")) {
+		return ELanguage.PL;
+	}
+
+	if (browserLang.startsWith("pt")) {
+		return ELanguage.PT;
+	}
+
+	if (browserLang.startsWith("ro")) {
+		return ELanguage.RO;
+	}
+
 	if (browserLang.startsWith("ru")) {
 		return ELanguage.RU;
+	}
+
+	if (browserLang.startsWith("sk")) {
+		return ELanguage.SK;
+	}
+
+	if (browserLang.startsWith("sv")) {
+		return ELanguage.SV;
+	}
+
+	if (browserLang.startsWith("th")) {
+		return ELanguage.TH;
+	}
+
+	if (browserLang.startsWith("tr")) {
+		return ELanguage.TR;
+	}
+
+	if (browserLang.startsWith("uk")) {
+		return ELanguage.UK;
+	}
+
+	if (browserLang.startsWith("vi")) {
+		return ELanguage.VI;
+	}
+
+	if (browserLang.startsWith("zh")) {
+		return ELanguage.ZH;
 	}
 
 	// Default to English

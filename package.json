@@ -29,7 +29,7 @@
 	"scripts": {
 		"prebuild": "rimraf dist",
 		"build": "rollup -c",
-		"build-storybook": "storybook build",
+		"build:storybook": "storybook build",
 		"clean": "rimraf dist",
 		"commit": "cz",
 		"format": "prettier --check .",

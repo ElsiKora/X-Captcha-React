@@ -1,9 +1,8 @@
 /* Main stylesheet for X-Captcha React SDK */
 
+/* Import local style modules */
 @import "./captcha-widget.module.css";
 @import "./captcha-form.module.css";
-
-/* Import Inter font */
 @import "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap";
 
 /* Global variables */
