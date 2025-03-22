@@ -28,6 +28,7 @@
 	],
 	"scripts": {
 		"build": "rollup -c",
+		"build-storybook": "storybook build",
 		"clean": "rimraf dist",
 		"commit": "cz",
 		"format": "prettier --check .",
@@ -42,6 +43,7 @@
 		"lint:types:fix": "tsc --noEmit --skipLibCheck",
 		"prepare": "husky",
 		"release": "semantic-release",
+		"storybook": "storybook dev -p 6006",
 		"test": "jest",
 		"typecheck": "tsc --noEmit"
 	},
@@ -50,10 +52,16 @@
 			"path": "@elsikora/commitizen-plugin-commitlint-ai"
 		}
 	},
+	"eslintConfig": {
+		"extends": [
+			"plugin:storybook/recommended"
+		]
+	},
 	"dependencies": {
 		"@elsikora/x-captcha-client": "^1.0.2"
 	},
 	"devDependencies": {
+		"@chromatic-com/storybook": "^3.2.6",
 		"@commitlint/cli": "^19.8.0",
 		"@commitlint/config-conventional": "^19.8.0",
 		"@elsikora/commitizen-plugin-commitlint-ai": "^1.0.0",
@@ -67,6 +75,16 @@
 		"@semantic-release/github": "^11.0.1",
 		"@semantic-release/npm": "^12.0.1",
 		"@semantic-release/release-notes-generator": "^14.0.3",
+		"@storybook/addon-a11y": "^8.6.8",
+		"@storybook/addon-controls": "^8.6.8",
+		"@storybook/addon-essentials": "^8.6.8",
+		"@storybook/addon-interactions": "^8.6.8",
+		"@storybook/addon-onboarding": "^8.6.8",
+		"@storybook/blocks": "^8.6.8",
+		"@storybook/react": "^8.6.8",
+		"@storybook/react-vite": "^8.6.8",
+		"@storybook/test": "^8.6.8",
+		"@storybook/types": "^8.6.8",
 		"@types/react": "^19.0.12",
 		"@types/react-dom": "^19.0.4",
 		"commitizen": "^4.3.1",
@@ -77,6 +95,7 @@
 		"eslint-plugin-n": "^17.16.2",
 		"eslint-plugin-no-secrets": "^2.2.1",
 		"eslint-plugin-react": "^7.37.4",
+		"eslint-plugin-storybook": "^0.11.6",
 		"husky": "^9.1.7",
 		"lint-staged": "^15.5.0",
 		"postcss": "^8.5.3",
@@ -86,6 +105,7 @@
 		"rollup-plugin-generate-package-json": "^3.2.0",
 		"rollup-plugin-postcss": "^4.0.2",
 		"semantic-release": "^24.2.3",
+		"storybook": "^8.6.8",
 		"stylelint": "^16.16.0",
 		"stylelint-config-css-modules": "^4.4.0",
 		"stylelint-config-rational-order": "^0.1.2",

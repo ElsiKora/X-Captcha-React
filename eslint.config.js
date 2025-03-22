@@ -23,6 +23,7 @@ export default [
 		withReact: true,
 		withRegexp: true,
 		withSonar: true,
+		withStorybook: true,
 		withStylistic: true,
 		withTypescript: true,
 		withUnicorn: true,

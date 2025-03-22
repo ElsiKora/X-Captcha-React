@@ -1,7 +1,7 @@
 import type { ICaptchaContext, ICaptchaProviderProperties } from "../interface";
 
 import { CaptchaClient } from "@elsikora/x-captcha-client";
-import React, { createContext, useContext, useMemo } from "react";
+import React, { createContext, use, useMemo } from "react";
 
 // Create the context
 const CaptchaContext: React.Context<ICaptchaContext | null> = createContext<ICaptchaContext | null>(null);
@@ -22,7 +22,7 @@ export const CaptchaProvider: React.FC<ICaptchaProviderProperties> = ({ apiUrl, 
 		[client],
 	);
 
-	return <CaptchaContext.Provider value={value}>{children}</CaptchaContext.Provider>;
+	return <CaptchaContext value={value}>{children}</CaptchaContext>;
 };
 
 /**
@@ -30,7 +30,7 @@ export const CaptchaProvider: React.FC<ICaptchaProviderProperties> = ({ apiUrl, 
  * @returns {ICaptchaContext} The captcha context
  */
 export const useCaptcha = (): ICaptchaContext => {
-	const context: ICaptchaContext | null = useContext(CaptchaContext);
+	const context: ICaptchaContext | null = use(CaptchaContext);
 
 	if (!context) {
 		throw new Error("useCaptcha must be used within a CaptchaProvider");
