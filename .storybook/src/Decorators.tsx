@@ -22,8 +22,12 @@ export const withLanguage = (languageCode: string = "en"): Decorator => {
 
 		const effectiveLanguage: string = (context.args?.language as string) ?? languageCode;
 
+		const supportedLanguages: Array<string> = ["ar", "bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "hi", "hu", "id", "it", "ja", "ko", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh"];
+
+		const language: string = supportedLanguages.includes(effectiveLanguage) ? effectiveLanguage : "en";
+
 		return (
-			<div className={"language-context"} data-language={effectiveLanguage}>
+			<div className={"language-context"} data-language={language}>
 				<Story />
 			</div>
 		);
