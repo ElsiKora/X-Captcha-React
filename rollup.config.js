@@ -15,9 +15,19 @@ export default [
 			dir: "dist/esm",
 			format: "esm",
 			preserveModules: true,
+			preserveModulesRoot: "src",
 			sourcemap: true,
 		},
 		plugins: [
+			typescript({
+				declaration: true,
+				declarationDir: "dist/esm",
+				outDir: "dist/esm",
+				outputToFilesystem: true,
+				rootDir: "./src",
+				sourceMap: true,
+				tsconfig: "./tsconfig.build.json",
+			}),
 			postcss({
 				autoModules: true,
 				extensions: [".css", ".module.css"],
@@ -28,13 +38,6 @@ export default [
 					generateScopedName: "[local]_[hash:base64:5]",
 				},
 				sourceMap: true,
-			}),
-			typescript({
-				declaration: true,
-				declarationDir: "dist/esm",
-				outDir: "dist/esm",
-				sourceMap: true,
-				tsconfig: "./tsconfig.json",
 			}),
 			generatePackageJson({
 				baseContents: { type: "module" },
@@ -50,9 +53,19 @@ export default [
 			exports: "named",
 			format: "cjs",
 			preserveModules: true,
+			preserveModulesRoot: "src",
 			sourcemap: true,
 		},
 		plugins: [
+			typescript({
+				declaration: true,
+				declarationDir: "dist/cjs",
+				outDir: "dist/cjs",
+				outputToFilesystem: true,
+				rootDir: "./src",
+				sourceMap: true,
+				tsconfig: "./tsconfig.build.json",
+			}),
 			postcss({
 				autoModules: true,
 				extensions: [".css", ".module.css"],
@@ -63,13 +76,6 @@ export default [
 					generateScopedName: "[local]_[hash:base64:5]",
 				},
 				sourceMap: true,
-			}),
-			typescript({
-				declaration: true,
-				declarationDir: "dist/cjs",
-				outDir: "dist/cjs",
-				sourceMap: true,
-				tsconfig: "./tsconfig.json",
 			}),
 			generatePackageJson({
 				baseContents: { type: "commonjs" },
