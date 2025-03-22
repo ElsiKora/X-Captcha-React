@@ -1,22 +1,22 @@
 {
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
-		"declaration": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"importHelpers": true,
+		"baseUrl": "..",
 		"jsx": "react-jsx",
 		"lib": ["es2020", "DOM"],
 		"module": "ESNext",
 		"moduleResolution": "node",
 		"outDir": "./dist",
+		"paths": {
+			"*": ["*"]
+		},
 		"resolveJsonModule": true,
-		"rootDir": ".",
+		"rootDir": "..",
 		"skipLibCheck": true,
-		"sourceMap": true,
 		"strict": true,
 		"target": "ESNext"
 	},
 	"exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "dist"],
-	"include": ["./src/**/*", "**/*"]
+	"extends": "../tsconfig.json",
+	"include": ["./**/*", "../src/**/*"]
 }

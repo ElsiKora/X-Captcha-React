@@ -1,6 +1,7 @@
 /* eslint-disable @elsikora/typescript/no-magic-numbers */
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
 import React from "react";
 
 import { CaptchaForm } from "../../src";
@@ -72,7 +73,6 @@ const meta: Meta<typeof CaptchaForm> = {
 			},
 		},
 		onSubmit: {
-			action: "submitted",
 			description: "Callback when form is submitted with valid captcha",
 			table: {
 				type: { summary: "(token: string, event: FormEvent) => void" },
@@ -121,6 +121,9 @@ export default meta;
 export const Default: StoryObj<typeof CaptchaForm> = {
 	args: {
 		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		onSubmit: fn((token: string) => {
+			console.log("Form submitted with token:", token);
+		}),
 		submitButtonText: "Submit",
 		themeColor: "#4285F4",
 	},

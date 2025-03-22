@@ -6,8 +6,7 @@ const config: StorybookConfig = {
 		name: "@storybook/react-vite",
 		options: {},
 	},
-	staticDirs: ["../public"],
-	stories: ["./src/stories/**/*.mdx", "./src/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+	stories: ["./src/**/*.mdx", "./src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
 	typescript: {
 		// eslint-disable-next-line @elsikora/typescript/naming-convention
 		check: true,

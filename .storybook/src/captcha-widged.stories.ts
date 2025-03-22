@@ -1,6 +1,8 @@
 /* eslint-disable @elsikora/typescript/no-magic-numbers */
 import type { Meta, StoryObj } from "@storybook/react";
 
+import { fn } from "@storybook/test";
+
 import { CaptchaWidget } from "../../src";
 
 import { withContainer, withLanguage, withMockCaptchaClient, withThemeColor } from "./Decorators";
@@ -72,14 +74,12 @@ const meta: Meta<typeof CaptchaWidget> = {
 			},
 		},
 		onError: {
-			action: "error",
 			description: "Callback when captcha verification fails",
 			table: {
 				type: { summary: "(error: string) => void" },
 			},
 		},
 		onVerify: {
-			action: "verified",
 			description: "Callback when captcha is successfully verified",
 			table: {
 				type: { summary: "(token: string) => void" },
@@ -144,6 +144,12 @@ export const Default: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: "http://127.0.0.1:3000/api/captcha",
 		height: 74,
+		onError: fn((error: unknown) => {
+			console.error("Captcha verification error:", error);
+		}),
+		onVerify: fn((token: string) => {
+			console.log("Captcha verified with token:", token);
+		}),
 		themeColor: "#4285F4",
 		width: 300,
 	},

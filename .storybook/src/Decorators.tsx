@@ -8,8 +8,7 @@ import type { TFormSubmitHandler } from "./type";
 
 import React from "react";
 
-import { MockCaptchaClient } from "./mocks/captchaService";
-import { mockFormHandlers } from "./mocks/formHandlers";
+import { MockCaptchaClient, mockFormHandlers } from "./mocks";
 
 /**
  * Decorator to provide language selection

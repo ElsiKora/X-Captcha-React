@@ -1,6 +1,7 @@
 {
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
+		"composite": true,
 		"declaration": true,
 		"esModuleInterop": true,
 		"forceConsistentCasingInFileNames": true,
@@ -11,12 +12,13 @@
 		"moduleResolution": "node",
 		"outDir": "./dist",
 		"resolveJsonModule": true,
-		"rootDir": "./src",
+		"rootDir": ".",
 		"skipLibCheck": true,
 		"sourceMap": true,
 		"strict": true,
 		"target": "ESNext"
 	},
 	"exclude": ["node_modules", "**/*.spec.ts", "**/*.spec.tsx", "dist"],
-	"include": ["src/**/*", ".storybook/**/*"]
+	"include": ["src/**/*"],
+	"references": [{ "path": "./.storybook/tsconfig.json" }]
 }
