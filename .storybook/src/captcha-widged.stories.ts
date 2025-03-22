@@ -142,15 +142,19 @@ export default meta;
  */
 export const Default: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: "http://127.0.0.1:4000/api/captcha",
 		height: 74,
+
+		language: "ru",
+
 		onError: fn((error: unknown) => {
 			console.error("Captcha verification error:", error);
 		}),
+
 		onVerify: fn((token: string) => {
 			console.log("Captcha verified with token:", token);
 		}),
-		themeColor: "#4285F4",
+		themeColor: "#f142f5",
 		width: 300,
 	},
 	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("en"), withContainer(400, 200), withThemeColor("#4285F4")],
