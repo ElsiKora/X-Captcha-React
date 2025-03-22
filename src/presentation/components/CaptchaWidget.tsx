@@ -18,7 +18,7 @@ import styles from "../styles/captcha-widget.module.css";
  * @param {ICaptchaWidgetProperties} props - The properties
  * @returns {React.ReactElement} The captcha widget
  */
-export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, height = 74, language, onError, onVerify, themeColor = "#4285F4", width = 300 }: ICaptchaWidgetProperties): React.ReactElement => {
+export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, backgroundColor, brandNameColor, checkmarkColor, errorTextColor, height = 74, language, onError, onVerify, shouldShowBrandName = true, themeColor = "#4285F4", tryAgainButtonBackgroundColor, tryAgainButtonTextColor, width = 300 }: ICaptchaWidgetProperties): React.ReactElement => {
 	// eslint-disable-next-line @elsikora/react/1/naming-convention/use-state
 	const [client]: [CaptchaClient, Dispatch<SetStateAction<CaptchaClient>>] = useState<CaptchaClient>(() => new CaptchaClient({ apiUrl }));
 	const [challenge, setChallenge]: [ICaptchaChallenge | null, Dispatch<SetStateAction<ICaptchaChallenge | null>>] = useState<ICaptchaChallenge | null>(null);
@@ -37,12 +37,58 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, heig
 		return createTranslator(detectedLanguage);
 	});
 
-	// Load a new challenge
+	// Calculate hover background color for the "Try Again" button
+	const getHoverBackgroundColor = (): string => {
+		const baseColor: string = tryAgainButtonBackgroundColor ?? "#f8f8f8";
+
+		// For simplicity, just slightly darken whatever the base color is
+		if (baseColor === "#f8f8f8") return "#f0f0f0";
+
+		if (baseColor.startsWith("#") && baseColor.length === 7) {
+			// Basic darkening for hex colors - reduce each RGB component by about 8%
+			try {
+				const r: number = Number.parseInt(baseColor.slice(1, 3), 16);
+				const g: number = Number.parseInt(baseColor.slice(3, 5), 16);
+				const b: number = Number.parseInt(baseColor.slice(5, 7), 16);
+
+				const darkenValue: number = 20; // Darken by this amount
+				const newR: number = Math.max(0, r - darkenValue);
+				const newG: number = Math.max(0, g - darkenValue);
+				const newB: number = Math.max(0, b - darkenValue);
+
+				return `#${newR.toString(16).padStart(2, "0")}${newG.toString(16).padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
+			} catch {
+				// Fallback if parsing fails
+				return "#f0f0f0";
+			}
+		}
+
+		return "#f0f0f0"; // Default fallback if not a hex color
+	};
+
+	// Load a new challenge with smooth transition
 	const loadChallenge: () => Promise<void> = useCallback(async () => {
 		try {
+			// Start with loading state and clear error
 			setIsLoading(true);
 			setError(null);
+
+			// Add a minimum load time for smooth transitions
+			const minLoadTime: number = 800; // milliseconds
+			const startTime: number = Date.now();
+
+			// Load the actual challenge
 			const newChallenge: ICaptchaChallenge = await client.getChallenge();
+
+			// Calculate remaining time to meet minimum load time
+			const elapsedTime: number = Date.now() - startTime;
+			const remainingTime: number = Math.max(0, minLoadTime - elapsedTime);
+
+			// Add artificial delay if needed for smoother UX
+			if (remainingTime > 0) {
+				await new Promise((resolve: (value: ICaptchaChallenge | PromiseLike<ICaptchaChallenge>) => void) => setTimeout(resolve, remainingTime));
+			}
+
 			setChallenge(newChallenge);
 		} catch {
 			setError(translate("failedToLoadChallenge"));
@@ -109,13 +155,13 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, heig
 
 			// Add artificial delay for better UX
 			setTimeout((): void => {
-				// Запускаем асинхронную функцию без создания еще одного уровня вложенности
+				// Run the async function without creating another level of nesting
 				void validateCaptcha(challenge).catch((error: unknown) => {
 					console.error("Unexpected error:", error);
 				});
 			}, 1500);
 		} catch {
-			// Код для обработки ошибок остается как был
+			// Error handling code remains as before
 			setAnimation("error");
 			setHasFakeDelay(false);
 			setTimeout((): void => {
@@ -155,9 +201,28 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, heig
 
 		if (error) {
 			return (
-				<div className={styles["x-captcha-error"]}>
+				<div className={styles["x-captcha-error"]} style={{ color: errorTextColor ?? "var(--x-captcha-error)" }}>
 					<div>{error}</div>
-					<button className={styles["x-captcha-error-button"]} onClick={() => void loadChallenge()} type={"button"}>
+					<button
+						className={styles["x-captcha-error-button"]}
+						onClick={() => {
+							// Set loading state immediately
+							setIsLoading(true);
+							// Clear error message for a clean transition
+							setError(null);
+							// Add a delay before actually loading to ensure visual transition is noticeable
+							setTimeout(() => {
+								void loadChallenge();
+							}, 300);
+						}}
+						style={
+							{
+								"--hover-bg-color": getHoverBackgroundColor(),
+								backgroundColor: tryAgainButtonBackgroundColor ?? "#f8f8f8",
+								color: tryAgainButtonTextColor ?? "var(--x-captcha-text)",
+							} as React.CSSProperties
+						}
+						type={"button"}>
 						<span className={styles["x-captcha-error-button-icon"]}>
 							<svg fill={"none"} height={"14"} stroke={"currentColor"} strokeLinecap={"round"} strokeLinejoin={"round"} strokeWidth={"2"} viewBox={"0 0 24 24"} width={"14"} xmlns={"http://www.w3.org/2000/svg"}>
 								<path d={"M21 12a9 9 0 0 1-9 9c-4.95 0-9-4.05-9-9s4.05-9 9-9c2.4 0 4.65.9 6.3 2.55"} />
@@ -174,7 +239,7 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, heig
 			return (
 				<div className={styles["x-captcha-verified"]} style={{ color: themeColor }}>
 					<div className={`${styles["x-captcha-checkbox"]} ${styles["x-captcha-checkbox-verified"]}`} style={{ backgroundColor: themeColor, borderColor: themeColor }}>
-						<svg className={`${styles["x-captcha-checkmark"]} ${styles["x-captcha-checkmark-visible"]}`} fill={"none"} height={"16"} stroke={"currentColor"} strokeLinecap={"round"} strokeLinejoin={"round"} strokeWidth={"3"} viewBox={"0 0 24 24"} width={"16"} xmlns={"http://www.w3.org/2000/svg"}>
+						<svg className={`${styles["x-captcha-checkmark"]} ${styles["x-captcha-checkmark-visible"]}`} fill={"none"} height={"16"} stroke={checkmarkColor ?? "white"} strokeLinecap={"round"} strokeLinejoin={"round"} strokeWidth={"3"} viewBox={"0 0 24 24"} width={"16"} xmlns={"http://www.w3.org/2000/svg"}>
 							<polyline points={"20 6 9 17 4 12"} />
 						</svg>
 					</div>
@@ -202,7 +267,7 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, heig
 								borderColor: animation === "error" ? "#F44336" : themeColor,
 							}}>
 							{isVerified && (
-								<svg className={`${styles["x-captcha-checkmark"]} ${isVerified ? styles["x-captcha-checkmark-visible"] : ""}`} fill={"none"} height={"16"} stroke={"currentColor"} strokeLinecap={"round"} strokeLinejoin={"round"} strokeWidth={"3"} viewBox={"0 0 24 24"} width={"16"} xmlns={"http://www.w3.org/2000/svg"}>
+								<svg className={`${styles["x-captcha-checkmark"]} ${isVerified ? styles["x-captcha-checkmark-visible"] : ""}`} fill={"none"} height={"16"} stroke={checkmarkColor ?? "white"} strokeLinecap={"round"} strokeLinejoin={"round"} strokeWidth={"3"} viewBox={"0 0 24 24"} width={"16"} xmlns={"http://www.w3.org/2000/svg"}>
 									<polyline points={"20 6 9 17 4 12"} />
 								</svg>
 							)}
@@ -214,11 +279,17 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, heig
 								}}
 							/>
 						</div>
-						<div className={styles["x-captcha-text"]}>{translate("notRobot")}</div>
-						<div className={styles["x-captcha-brand"]}>{translate("brandName")}</div>
+						<div className={styles["x-captcha-text"]} style={{ color: themeColor }}>
+							{translate("notRobot")}
+						</div>
+						{shouldShowBrandName && (
+							<div className={styles["x-captcha-brand"]} style={{ color: brandNameColor ?? "var(--x-captcha-text-light)" }}>
+								{translate("brandName")}
+							</div>
+						)}
 
 						{/* Verifying overlay with loading animation */}
-						<div className={`${styles["x-captcha-verifying-overlay"]} ${hasFakeDelay ? styles["x-captcha-verifying-overlay-visible"] : ""}`}>
+						<div className={`${styles["x-captcha-verifying-overlay"]} ${hasFakeDelay ? styles["x-captcha-verifying-overlay-visible"] : ""}`} style={{ backgroundColor: backgroundColor ?? "var(--x-captcha-background)" }}>
 							<div className={styles["x-captcha-loading"]} style={{ color: themeColor }}>
 								<div
 									className={styles["x-captcha-loading-spinner"]}
@@ -241,7 +312,13 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, heig
 	};
 
 	return (
-		<div className={styles["x-captcha-widget"]} style={{ height, width }}>
+		<div
+			className={styles["x-captcha-widget"]}
+			style={{
+				backgroundColor: backgroundColor ?? "var(--x-captcha-background)",
+				height,
+				width,
+			}}>
 			{renderCaptcha()}
 		</div>
 	);

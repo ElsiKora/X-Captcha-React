@@ -3,6 +3,9 @@
 @import "./captcha-widget.module.css";
 @import "./captcha-form.module.css";
 
+/* Import Inter font */
+@import "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap";
+
 /* Global variables */
 :root,
 body,
@@ -35,6 +38,9 @@ html,
 	--x-captcha-font-xs: 10px;
 	--x-captcha-font-sm: 14px;
 	--x-captcha-font-md: 15px;
+
+	/* Font family */
+	--x-captcha-font-family: "Inter", -apple-system, blinkmacsystemfont, "Segoe UI", roboto, oxygen, ubuntu, cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 
 	/* Border radius */
 	--x-captcha-radius-sm: 4px;

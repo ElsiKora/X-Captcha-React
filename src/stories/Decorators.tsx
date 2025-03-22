@@ -110,18 +110,20 @@ export const withContainer = (width: number | string = 400, height: number | str
 };
 
 /**
- * Decorator for simulating different theme colors
+ * Decorator for simulating different theme colors and background colors
  * @param {string} themeColor - The theme color to use
+ * @param {string} backgroundColor - The background color to use
  * @returns {Decorator} A decorator function
  */
-export const withThemeColor = (themeColor: string = "#4285F4"): Decorator => {
+export const withThemeColor = (themeColor: string = "#4285F4", backgroundColor?: string): Decorator => {
 	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"], context: StoryContext<ReactRenderer, StrictArgs>) => {
-		// Allow overriding the theme color from Story args
+		// Allow overriding the theme color and background color from Story args
 		const effectiveThemeColor: string = (context.args.themeColor as string) ?? themeColor;
+		const effectiveBackgroundColor: string | undefined = (context.args.backgroundColor as string) ?? backgroundColor;
 
 		return (
-			<div data-theme-color={effectiveThemeColor}>
+			<div data-background-color={effectiveBackgroundColor} data-theme-color={effectiveThemeColor}>
 				<Story />
 			</div>
 		);

@@ -5,6 +5,26 @@ export interface ICaptchaWidgetProperties {
 	apiUrl: string;
 
 	/**
+	 * Background color for the captcha widget
+	 */
+	backgroundColor?: string;
+
+	/**
+	 * Color for the brand name text
+	 */
+	brandNameColor?: string;
+
+	/**
+	 * Color for the checkmark when the captcha is verified
+	 */
+	checkmarkColor?: string;
+
+	/**
+	 * Color for the error text
+	 */
+	errorTextColor?: string;
+
+	/**
 	 * Height of the captcha widget
 	 */
 	height?: number | string;
@@ -26,9 +46,25 @@ export interface ICaptchaWidgetProperties {
 	onVerify?: (token: string) => void;
 
 	/**
+	 * Whether to show the brand name in the widget
+	 * @default true
+	 */
+	shouldShowBrandName?: boolean;
+
+	/**
 	 * Theme color for the captcha widget
 	 */
 	themeColor?: string;
+
+	/**
+	 * Background color for the "Try Again" button
+	 */
+	tryAgainButtonBackgroundColor?: string;
+
+	/**
+	 * Text color for the "Try Again" button
+	 */
+	tryAgainButtonTextColor?: string;
 
 	/**
 	 * Width of the captcha widget

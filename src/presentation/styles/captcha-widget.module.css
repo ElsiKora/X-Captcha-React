@@ -10,6 +10,7 @@
 	height: 74px;
 	padding: var(--x-captcha-spacing);
 	overflow: hidden;
+	font-family: var(--x-captcha-font-family);
 	background: var(--x-captcha-background);
 	border-radius: var(--x-captcha-radius-lg);
 	box-shadow: var(--x-captcha-shadow);
@@ -65,8 +66,9 @@
 	transition: var(--x-captcha-transition-fast);
 }
 
-.x-captcha-error-button:hover {
-	background-color: #f0f0f0;
+.x-captcha-error-button:hover,
+.x-captcha-error-button:focus {
+	background-color: var(--hover-bg-color, #f0f0f0) !important;
 }
 
 .x-captcha-error-button-icon {
@@ -90,6 +92,7 @@
 .x-captcha-container {
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	width: 100%;
 	height: 100%;
 	padding: 0 16px;
@@ -106,7 +109,7 @@
 	justify-content: center;
 	width: 24px;
 	height: 24px;
-	margin-right: 7px;
+	margin-right: 10px;
 	background-color: transparent;
 	border: 2px solid var(--x-captcha-primary);
 	border-radius: var(--x-captcha-radius-sm);
