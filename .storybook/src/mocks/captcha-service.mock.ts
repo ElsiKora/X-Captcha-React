@@ -11,10 +11,8 @@ export class MockCaptchaClient {
 
 	private readonly RESPONSE_DELAY: number;
 
-	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	private readonly SHOULD_SUCCEED: boolean;
 
-	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	private readonly SHOULD_TIMEOUT: boolean;
 
 	/**

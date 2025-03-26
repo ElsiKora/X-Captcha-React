@@ -1,10 +1,11 @@
 /* eslint-disable @elsikora/react/1/no-use-context */
-import type { ICaptchaContext, ICaptchaProviderProperties } from "../interface";
+import type { ICaptchaContext, ICaptchaProviderProperties, ILanguage } from "../interface";
 
 import { CaptchaClient } from "@elsikora/x-captcha-client";
 import React, { createContext, useContext, useMemo } from "react";
 
 import { createTranslator, detectLanguage } from "../i18n";
+
 import styles from "../styles/captcha-widget.module.css";
 
 // Create the context
@@ -17,19 +18,21 @@ const CaptchaContext: React.Context<ICaptchaContext | null> = createContext<ICap
  */
 export const CaptchaProvider: React.FC<ICaptchaProviderProperties> = ({ apiUrl, children, language, publicKey }: ICaptchaProviderProperties): React.ReactElement => {
 	// Check if publicKey is provided
-	const isMissingPublicKey = !publicKey;
-	
+	const isMissingPublicKey: boolean = !publicKey;
+
 	// Initialize translation function
-	const translate = useMemo(() => {
-		const detectedLanguage = language ?? detectLanguage();
+	const translate: (key: keyof ILanguage) => string = useMemo(() => {
+		const detectedLanguage: string = language ?? detectLanguage();
+
 		return createTranslator(detectedLanguage);
 	}, [language]);
-	
+
 	// Create a memoized client instance to avoid unnecessary re-renders
 	const client: CaptchaClient | null = useMemo(() => {
 		if (!publicKey) {
 			return null;
 		}
+
 		return new CaptchaClient({ apiUrl, publicKey });
 	}, [apiUrl, publicKey]);
 
@@ -46,12 +49,13 @@ export const CaptchaProvider: React.FC<ICaptchaProviderProperties> = ({ apiUrl, 
 
 	const value: ICaptchaContext = useMemo(
 		() => ({
-			client: client as CaptchaClient,
+			// eslint-disable-next-line @elsikora/typescript/no-non-null-assertion
+			client: client!,
 		}),
 		[client],
 	);
 
-	return <CaptchaContext.Provider value={value}>{children}</CaptchaContext.Provider>;
+	return <CaptchaContext value={value}>{children}</CaptchaContext>;
 };
 
 /**

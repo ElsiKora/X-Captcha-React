@@ -23,7 +23,6 @@ const meta: Meta<typeof CaptchaWidget> = {
 			control: "text",
 			description: "The URL of the captcha API",
 			table: {
-				// eslint-disable-next-line @elsikora/sonar/no-duplicate-string
 				defaultValue: { summary: DEFAULT_API_URL },
 				type: { summary: "string" },
 			},
@@ -162,7 +161,9 @@ export default meta;
 export const Default: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		errorTextColor: "#d10707",
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+
 		language: "uk",
 
 		onError: fn((error: unknown) => {
@@ -172,11 +173,9 @@ export const Default: StoryObj<typeof CaptchaWidget> = {
 		onVerify: fn((token: string) => {
 			console.log("Captcha verified with token:", token);
 		}),
-
 		publicKey: "sd3w5w35",
 		themeColor: "#f142f5",
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
-		errorTextColor: "#d10707",
 	},
 	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage(DEFAULT_LANGUAGE), withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT), withThemeColor(THEME_COLORS.BLUE)],
 };

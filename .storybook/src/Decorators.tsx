@@ -8,15 +8,7 @@ import type { TFormSubmitHandler } from "./type";
 
 import React from "react";
 
-import { 
-	CONTAINER_SIZES, 
-	DEFAULT_API_URL, 
-	DEFAULT_LANGUAGE, 
-	DEFAULT_PUBLIC_KEY, 
-	RESPONSE_DELAYS,
-	SUPPORTED_LANGUAGES, 
-	THEME_COLORS 
-} from "./Constants";
+import { CONTAINER_SIZES, DEFAULT_API_URL, DEFAULT_LANGUAGE, DEFAULT_PUBLIC_KEY, RESPONSE_DELAYS, SUPPORTED_LANGUAGES, THEME_COLORS } from "./Constants";
 import { MockCaptchaClient, mockFormHandlers } from "./mocks";
 
 /**

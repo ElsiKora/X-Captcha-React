@@ -6,16 +6,8 @@ import React from "react";
 
 import { CaptchaForm } from "../../src";
 
-import { 
-  CONTAINER_SIZES, 
-  DEFAULT_API_URL, 
-  DEFAULT_PUBLIC_KEY, 
-  SUBMIT_BUTTON_TEXT, 
-  THEME_COLORS,
-  WIDGET_DIMENSIONS,
-  SUPPORTED_LANGUAGES
-} from "./Constants";
 import { ContactFormFields, LoginFormFields, RegistrationFormFields } from "./components/FormFields";
+import { CONTAINER_SIZES, DEFAULT_API_URL, DEFAULT_PUBLIC_KEY, SUBMIT_BUTTON_TEXT, SUPPORTED_LANGUAGES, THEME_COLORS, WIDGET_DIMENSIONS } from "./Constants";
 import { withContainer, withFormInteraction, withFormSubmission, withLanguage, withMockCaptchaClient, withThemeColor } from "./Decorators";
 
 // @ts-ignore

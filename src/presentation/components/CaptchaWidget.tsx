@@ -20,8 +20,8 @@ import styles from "../styles/captcha-widget.module.css";
  */
 export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, backgroundColor, brandNameColor, checkmarkColor, errorTextColor, height = 74, language, onError, onVerify, publicKey, shouldShowBrandName = true, themeColor = "#4285F4", tryAgainButtonBackgroundColor, tryAgainButtonTextColor, width = 300 }: ICaptchaWidgetProperties): React.ReactElement => {
 	// Check if publicKey is provided
-	const isMissingPublicKey = !publicKey;
-	
+	const isMissingPublicKey: boolean = !publicKey;
+
 	// eslint-disable-next-line @elsikora/react/1/naming-convention/use-state
 	const [client]: [CaptchaClient | null, Dispatch<SetStateAction<CaptchaClient | null>>] = useState<CaptchaClient | null>(() => {
 		if (!publicKey) {
@@ -173,7 +173,7 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 				</div>
 			);
 		}
-		
+
 		if (isLoading) {
 			return (
 				<div className={styles["x-captcha-loading"]}>

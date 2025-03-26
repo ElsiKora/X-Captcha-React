@@ -10,7 +10,7 @@ export interface ICaptchaProviderProperties {
 	 * Children components
 	 */
 	children: ReactNode;
-	
+
 	/**
 	 * Language code (e.g., 'en', 'fr')
 	 * If not provided, will be auto-detected

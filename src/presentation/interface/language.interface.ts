@@ -3,8 +3,8 @@ export interface ILanguage {
 	errorDuringVerification: string;
 	failedToLoadChallenge: string;
 	loading: string;
-	missingPublicKey: string;
 	missingProviderKey: string;
+	missingPublicKey: string;
 	noChallenge: string;
 	notRobot: string;
 	pleaseCompleteCaptcha: string;
