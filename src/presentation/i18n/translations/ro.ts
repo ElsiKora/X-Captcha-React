@@ -8,6 +8,8 @@ export const RO: ILanguage = {
 	errorDuringVerification: "Eroare în timpul verificării",
 	failedToLoadChallenge: "Încărcarea provocării captcha a eșuat",
 	loading: "Se încarcă captcha...",
+	missingPublicKey: "Lipsește cheia API",
+	missingProviderKey: "Lipsește cheia furnizorului",
 	noChallenge: "Nicio provocare încărcată",
 	notRobot: "Nu sunt robot",
 	pleaseCompleteCaptcha: "Vă rugăm să completați captcha înainte de a trimite",

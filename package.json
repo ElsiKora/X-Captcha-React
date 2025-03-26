@@ -59,7 +59,7 @@
 		]
 	},
 	"dependencies": {
-		"@elsikora/x-captcha-client": "^1.0.2"
+		"@elsikora/x-captcha-client": "file:.yalc/@elsikora/x-captcha-client"
 	},
 	"devDependencies": {
 		"@chromatic-com/storybook": "^3.2.6",

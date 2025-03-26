@@ -6,6 +6,15 @@ import React from "react";
 
 import { CaptchaForm } from "../../src";
 
+import { 
+  CONTAINER_SIZES, 
+  DEFAULT_API_URL, 
+  DEFAULT_PUBLIC_KEY, 
+  SUBMIT_BUTTON_TEXT, 
+  THEME_COLORS,
+  WIDGET_DIMENSIONS,
+  SUPPORTED_LANGUAGES
+} from "./Constants";
 import { ContactFormFields, LoginFormFields, RegistrationFormFields } from "./components/FormFields";
 import { withContainer, withFormInteraction, withFormSubmission, withLanguage, withMockCaptchaClient, withThemeColor } from "./Decorators";
 
@@ -15,13 +24,15 @@ import { withContainer, withFormInteraction, withFormSubmission, withLanguage, w
  * to protect your applications from spam and automated submissions.
  */
 const meta: Meta<typeof CaptchaForm> = {
+	args: {
+		publicKey: DEFAULT_PUBLIC_KEY,
+	},
 	argTypes: {
 		apiUrl: {
 			control: "text",
 			description: "The URL of the captcha API",
 			table: {
-				// eslint-disable-next-line @elsikora/sonar/no-duplicate-string
-				defaultValue: { summary: "http://127.0.0.1:3000/api/captcha" },
+				defaultValue: { summary: DEFAULT_API_URL },
 				type: { summary: "string" },
 			},
 		},
@@ -59,14 +70,14 @@ const meta: Meta<typeof CaptchaForm> = {
 			description: "Height of the captcha widget in pixels",
 			table: {
 				// @ts-ignore
-				defaultValue: { summary: 74 },
+				defaultValue: { summary: WIDGET_DIMENSIONS.DEFAULT_HEIGHT },
 				type: { summary: "number | string" },
 			},
 		},
 		language: {
 			control: "select",
 			description: "Language for form text (auto-detects if not provided)",
-			options: ["ar", "bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "hi", "hu", "id", "it", "ja", "ko", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh"],
+			options: SUPPORTED_LANGUAGES,
 			table: {
 				defaultValue: { summary: "Auto-detected" },
 				type: { summary: "string" },
@@ -78,11 +89,18 @@ const meta: Meta<typeof CaptchaForm> = {
 				type: { summary: "(token: string, event: FormEvent) => void" },
 			},
 		},
+		publicKey: {
+			control: "text",
+			description: "The public key for the captcha API",
+			table: {
+				type: { summary: "string" },
+			},
+		},
 		submitButtonText: {
 			control: "text",
 			description: "Text for the submit button",
 			table: {
-				defaultValue: { summary: "Submit" },
+				defaultValue: { summary: SUBMIT_BUTTON_TEXT.DEFAULT },
 				type: { summary: "string" },
 			},
 		},
@@ -90,7 +108,7 @@ const meta: Meta<typeof CaptchaForm> = {
 			control: "color",
 			description: "Theme color for the form",
 			table: {
-				defaultValue: { summary: "#4285F4" },
+				defaultValue: { summary: THEME_COLORS.BLUE },
 				type: { summary: "string" },
 			},
 		},
@@ -99,13 +117,13 @@ const meta: Meta<typeof CaptchaForm> = {
 			description: "Width of the captcha widget in pixels",
 			table: {
 				// @ts-ignore
-				defaultValue: { summary: 300 },
+				defaultValue: { summary: WIDGET_DIMENSIONS.DEFAULT_WIDTH },
 				type: { summary: "number | string" },
 			},
 		},
 	},
 	component: CaptchaForm,
-	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withContainer(500, "auto")],
+	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 	parameters: {
 		layout: "centered",
 	},
@@ -120,12 +138,12 @@ export default meta;
  */
 export const Default: StoryObj<typeof CaptchaForm> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: DEFAULT_API_URL,
 		onSubmit: fn((token: string) => {
 			console.log("Form submitted with token:", token);
 		}),
-		submitButtonText: "Submit",
-		themeColor: "#4285F4",
+		submitButtonText: SUBMIT_BUTTON_TEXT.DEFAULT,
+		themeColor: THEME_COLORS.BLUE,
 	},
 	decorators: [withFormSubmission("logger")],
 };
@@ -135,12 +153,12 @@ export const Default: StoryObj<typeof CaptchaForm> = {
  */
 export const LoginForm: StoryObj<typeof CaptchaForm> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: DEFAULT_API_URL,
 		children: <LoginFormFields />,
-		submitButtonText: "Login",
-		themeColor: "#4285F4",
+		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN,
+		themeColor: THEME_COLORS.BLUE,
 	},
-	decorators: [withFormSubmission("success"), withContainer(500, "auto")],
+	decorators: [withFormSubmission("success"), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
 
 /**
@@ -148,13 +166,13 @@ export const LoginForm: StoryObj<typeof CaptchaForm> = {
  */
 export const ContactForm: StoryObj<typeof CaptchaForm> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		buttonColor: "#34A853",
+		apiUrl: DEFAULT_API_URL,
+		buttonColor: THEME_COLORS.GREEN,
 		children: <ContactFormFields />,
-		submitButtonText: "Send Message",
-		themeColor: "#34A853",
+		submitButtonText: SUBMIT_BUTTON_TEXT.CONTACT,
+		themeColor: THEME_COLORS.GREEN,
 	},
-	decorators: [withFormSubmission("successWithAlert"), withContainer(500, "auto")],
+	decorators: [withFormSubmission("successWithAlert"), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
 
 /**
@@ -162,12 +180,12 @@ export const ContactForm: StoryObj<typeof CaptchaForm> = {
  */
 export const RegistrationForm: StoryObj<typeof CaptchaForm> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: DEFAULT_API_URL,
 		children: <RegistrationFormFields />,
-		submitButtonText: "Register",
-		themeColor: "#4285F4",
+		submitButtonText: SUBMIT_BUTTON_TEXT.REGISTER,
+		themeColor: THEME_COLORS.BLUE,
 	},
-	decorators: [withFormSubmission("success"), withContainer(500, "auto")],
+	decorators: [withFormSubmission("success"), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
 
 /**
@@ -175,13 +193,13 @@ export const RegistrationForm: StoryObj<typeof CaptchaForm> = {
  */
 export const CustomTheme: StoryObj<typeof CaptchaForm> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		buttonColor: "#EA4335",
+		apiUrl: DEFAULT_API_URL,
+		buttonColor: THEME_COLORS.RED,
 		children: <LoginFormFields />,
-		submitButtonText: "Login",
-		themeColor: "#EA4335",
+		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN,
+		themeColor: THEME_COLORS.RED,
 	},
-	decorators: [withFormSubmission("logger"), withThemeColor("#EA4335"), withContainer(500, "auto")],
+	decorators: [withFormSubmission("logger"), withThemeColor(THEME_COLORS.RED), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
 
 /**
@@ -189,13 +207,13 @@ export const CustomTheme: StoryObj<typeof CaptchaForm> = {
  */
 export const RussianLanguage: StoryObj<typeof CaptchaForm> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: DEFAULT_API_URL,
 		children: <LoginFormFields />,
 		language: "ru",
-		submitButtonText: "Войти",
-		themeColor: "#4285F4",
+		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN_RU,
+		themeColor: THEME_COLORS.BLUE,
 	},
-	decorators: [withFormSubmission("logger"), withLanguage("ru"), withContainer(500, "auto")],
+	decorators: [withFormSubmission("logger"), withLanguage("ru"), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
 
 /**
@@ -203,12 +221,12 @@ export const RussianLanguage: StoryObj<typeof CaptchaForm> = {
  */
 export const SubmissionError: StoryObj<typeof CaptchaForm> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: DEFAULT_API_URL,
 		children: <LoginFormFields />,
-		submitButtonText: "Login",
-		themeColor: "#4285F4",
+		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN,
+		themeColor: THEME_COLORS.BLUE,
 	},
-	decorators: [withFormSubmission("error"), withContainer(500, "auto")],
+	decorators: [withFormSubmission("error"), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
 
 /**
@@ -216,12 +234,12 @@ export const SubmissionError: StoryObj<typeof CaptchaForm> = {
  */
 export const AutoVerification: StoryObj<typeof CaptchaForm> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: DEFAULT_API_URL,
 		children: <LoginFormFields />,
-		submitButtonText: "Login",
-		themeColor: "#4285F4",
+		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN,
+		themeColor: THEME_COLORS.BLUE,
 	},
-	decorators: [withFormSubmission("success"), withFormInteraction({ shouldAutoVerifyCaptcha: true }), withContainer(500, "auto")],
+	decorators: [withFormSubmission("success"), withFormInteraction({ shouldAutoVerifyCaptcha: true }), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 	parameters: {
 		docs: {
 			description: {
@@ -236,16 +254,16 @@ export const AutoVerification: StoryObj<typeof CaptchaForm> = {
  */
 export const AutoSubmission: StoryObj<typeof CaptchaForm> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: DEFAULT_API_URL,
 		children: <LoginFormFields />,
-		submitButtonText: "Login",
-		themeColor: "#4285F4",
+		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN,
+		themeColor: THEME_COLORS.BLUE,
 	},
-	decorators: [withFormSubmission("successWithAlert"), withFormInteraction({ autoSubmitDelay: 1500, shouldAutoVerifyCaptcha: true }), withContainer(500, "auto")],
+	decorators: [withFormSubmission("successWithAlert"), withFormInteraction({ autoSubmitDelay: 1500, shouldAutoVerifyCaptcha: true }), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 	parameters: {
 		docs: {
 			description: {
-				story: "This story automatically verifies the CAPTCHA and submits the form to demonstrate the entire workflow.",
+				story: "This story automatically verifies the CAPTCHA after 1 second to demonstrate the entire workflow.",
 			},
 		},
 	},

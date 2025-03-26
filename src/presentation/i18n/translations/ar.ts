@@ -8,6 +8,8 @@ export const AR: ILanguage = {
 	errorDuringVerification: "خطأ أثناء التحقق",
 	failedToLoadChallenge: "فشل تحميل اختبار كابتشا",
 	loading: "جارٍ تحميل كابتشا...",
+	missingPublicKey: "مفتاح API مفقود",
+	missingProviderKey: "مفتاح المزود مفقود",
 	noChallenge: "لم يتم تحميل أي اختبار",
 	notRobot: "أنا لست روبوتًا",
 	pleaseCompleteCaptcha: "يرجى إكمال كابتشا قبل الإرسال",

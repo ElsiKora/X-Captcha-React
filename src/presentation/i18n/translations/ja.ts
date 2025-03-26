@@ -8,6 +8,8 @@ export const JA: ILanguage = {
 	errorDuringVerification: "認証中にエラーが発生しました",
 	failedToLoadChallenge: "CAPTCHAチャレンジの読み込みに失敗しました",
 	loading: "CAPTCHAを読み込み中...",
+	missingPublicKey: "APIキーがありません",
+	missingProviderKey: "プロバイダーキーがありません",
 	noChallenge: "チャレンジが読み込まれていません",
 	notRobot: "私はロボットではありません",
 	pleaseCompleteCaptcha: "送信前にCAPTCHAを完了してください",

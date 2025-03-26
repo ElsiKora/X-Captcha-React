@@ -8,6 +8,8 @@ export const NO: ILanguage = {
 	errorDuringVerification: "Feil under verifisering",
 	failedToLoadChallenge: "Kunne ikke laste captcha-utfordring",
 	loading: "Laster captcha...",
+	missingPublicKey: "Mangler API-nøkkel",
+	missingProviderKey: "Mangler leverandørnøkkel",
 	noChallenge: "Ingen utfordring lastet",
 	notRobot: "Jeg er ikke en robot",
 	pleaseCompleteCaptcha: "Vennligst fullfør captcha før du sender inn",

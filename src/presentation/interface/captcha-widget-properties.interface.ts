@@ -46,6 +46,11 @@ export interface ICaptchaWidgetProperties {
 	onVerify?: (token: string) => void;
 
 	/**
+	 * Public key for the captcha widget (required)
+	 */
+	publicKey: string;
+
+	/**
 	 * Whether to show the brand name in the widget
 	 * @default true
 	 */

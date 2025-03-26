@@ -8,6 +8,8 @@ export const HU: ILanguage = {
 	errorDuringVerification: "Hiba az ellenőrzés során",
 	failedToLoadChallenge: "Nem sikerült betölteni a captcha kihívást",
 	loading: "Captcha betöltése...",
+	missingPublicKey: "Hiányzó API kulcs",
+	missingProviderKey: "Hiányzó szolgáltatói kulcs",
 	noChallenge: "Nincs betöltve kihívás",
 	notRobot: "Nem vagyok robot",
 	pleaseCompleteCaptcha: "Kérjük, töltse ki a captcha-t a beküldés előtt",

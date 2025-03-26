@@ -8,6 +8,8 @@ export const SV: ILanguage = {
 	errorDuringVerification: "Fel under verifiering",
 	failedToLoadChallenge: "Kunde inte ladda captcha-utmaning",
 	loading: "Laddar captcha...",
+	missingPublicKey: "API-nyckel saknas",
+	missingProviderKey: "Leverantörsnyckel saknas",
 	noChallenge: "Ingen utmaning laddad",
 	notRobot: "Jag är inte en robot",
 	pleaseCompleteCaptcha: "Vänligen slutför captcha innan du skickar",

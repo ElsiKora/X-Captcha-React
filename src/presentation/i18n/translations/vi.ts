@@ -8,6 +8,8 @@ export const VI: ILanguage = {
 	errorDuringVerification: "Lỗi trong quá trình xác minh",
 	failedToLoadChallenge: "Không thể tải thử thách captcha",
 	loading: "Đang tải captcha...",
+	missingPublicKey: "Thiếu khóa API",
+	missingProviderKey: "Thiếu khóa nhà cung cấp",
 	noChallenge: "Không có thử thách được tải",
 	notRobot: "Tôi không phải là robot",
 	pleaseCompleteCaptcha: "Vui lòng hoàn thành captcha trước khi gửi",

@@ -1,12 +1,11 @@
 /* eslint-disable @elsikora/typescript/no-magic-numbers */
-import type { ICaptchaChallenge, ICaptchaValidationResult } from "@elsikora/x-captcha-client";
+import type { IChallenge, IChallengeSolveResponse } from "@elsikora/x-captcha-client";
 import type { CSSProperties, Dispatch, SetStateAction } from "react";
 
 import type { ICaptchaWidgetProperties } from "../interface";
 import type { TTranslateFunction } from "../type";
 
-import { ECaptchaType } from "@elsikora/x-captcha-client";
-import { CaptchaClient } from "@elsikora/x-captcha-client";
+import { CaptchaClient, ECaptchaType } from "@elsikora/x-captcha-client";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 import { createTranslator, detectLanguage } from "../i18n";
@@ -19,10 +18,19 @@ import styles from "../styles/captcha-widget.module.css";
  * @param {ICaptchaWidgetProperties} props - The properties
  * @returns {React.ReactElement} The captcha widget
  */
-export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, backgroundColor, brandNameColor, checkmarkColor, errorTextColor, height = 74, language, onError, onVerify, shouldShowBrandName = true, themeColor = "#4285F4", tryAgainButtonBackgroundColor, tryAgainButtonTextColor, width = 300 }: ICaptchaWidgetProperties): React.ReactElement => {
+export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, backgroundColor, brandNameColor, checkmarkColor, errorTextColor, height = 74, language, onError, onVerify, publicKey, shouldShowBrandName = true, themeColor = "#4285F4", tryAgainButtonBackgroundColor, tryAgainButtonTextColor, width = 300 }: ICaptchaWidgetProperties): React.ReactElement => {
+	// Check if publicKey is provided
+	const isMissingPublicKey = !publicKey;
+	
 	// eslint-disable-next-line @elsikora/react/1/naming-convention/use-state
-	const [client]: [CaptchaClient, Dispatch<SetStateAction<CaptchaClient>>] = useState<CaptchaClient>(() => new CaptchaClient({ apiUrl }));
-	const [challenge, setChallenge]: [ICaptchaChallenge | null, Dispatch<SetStateAction<ICaptchaChallenge | null>>] = useState<ICaptchaChallenge | null>(null);
+	const [client]: [CaptchaClient | null, Dispatch<SetStateAction<CaptchaClient | null>>] = useState<CaptchaClient | null>(() => {
+		if (!publicKey) {
+			return null;
+		}
+
+		return new CaptchaClient({ apiUrl, publicKey });
+	});
+	const [challenge, setChallenge]: [IChallenge | null, Dispatch<SetStateAction<IChallenge | null>>] = useState<IChallenge | null>(null);
 	const [isLoading, setIsLoading]: [boolean, Dispatch<SetStateAction<boolean>>] = useState<boolean>(true);
 	const [isVerifying, setIsVerifying]: [boolean, Dispatch<SetStateAction<boolean>>] = useState<boolean>(false);
 	const [isVerified, setIsVerified]: [boolean, Dispatch<SetStateAction<boolean>>] = useState<boolean>(false);
@@ -65,7 +73,7 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 			const startTime: number = Date.now();
 
 			// Load the actual challenge
-			const newChallenge: ICaptchaChallenge = await client.getChallenge();
+			const newChallenge: IChallenge = await client.createChallenge(ECaptchaType.CLICK);
 
 			// Calculate remaining time to meet minimum load time
 			const elapsedTime: number = Date.now() - startTime;
@@ -73,7 +81,7 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 
 			// Add artificial delay if needed for smoother UX
 			if (remainingTime > 0) {
-				await new Promise((resolve: (value: ICaptchaChallenge | PromiseLike<ICaptchaChallenge>) => void) => setTimeout(resolve, remainingTime));
+				await new Promise((resolve: (value: IChallenge | PromiseLike<IChallenge>) => void) => setTimeout(resolve, remainingTime));
 			}
 
 			setChallenge(newChallenge);
@@ -87,32 +95,16 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 	}, [client, onError, translate]);
 
 	// Validate the captcha challenge
-	const validateCaptcha = async (challenge: ICaptchaChallenge): Promise<void> => {
+	const validateCaptcha = async (challenge: IChallenge): Promise<void> => {
 		try {
-			const result: ICaptchaValidationResult = await client.validate({
-				challengeId: challenge.id,
-				// eslint-disable-next-line @elsikora/typescript/naming-convention
-				response: true,
-			});
+			const result: IChallengeSolveResponse = await client.solveChallenge(challenge.id, "click");
 
-			if (result.isSuccess && result.token) {
-				setAnimation("success");
-				setHasFakeDelay(false);
-				setIsVerified(true);
-				setTimeout(() => {
-					if (onVerify && result.token) onVerify(result.token);
-				}, 300);
-			} else {
-				setAnimation("error");
-				setTimeout((): void => {
-					setAnimation("none");
-					setHasFakeDelay(false);
-					setError(result.error ?? translate("verificationFailed"));
-
-					if (onError) onError(result.error ?? translate("verificationFailed"));
-					void loadChallenge();
-				}, 500);
-			}
+			setAnimation("success");
+			setHasFakeDelay(false);
+			setIsVerified(true);
+			setTimeout(() => {
+				if (onVerify && result.token) onVerify(result.token);
+			}, 300);
 		} catch {
 			setAnimation("error");
 			setTimeout((): void => {
@@ -164,13 +156,24 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 		}
 	}, [challenge, client, loadChallenge, onError, onVerify, isVerified, isVerifying, translate]);
 
-	// Load challenge on mount
+	// Load challenge on mount if publicKey is provided
 	useEffect(() => {
-		void loadChallenge();
-	}, [loadChallenge]);
+		if (client) {
+			void loadChallenge();
+		}
+	}, [loadChallenge, client]);
 
 	// Render the appropriate captcha based on type
 	const renderCaptcha = (): React.ReactElement => {
+		// Check for missing publicKey first
+		if (isMissingPublicKey) {
+			return (
+				<div className={styles["x-captcha-error"]}>
+					<div>{translate("missingPublicKey")}</div>
+				</div>
+			);
+		}
+		
 		if (isLoading) {
 			return (
 				<div className={styles["x-captcha-loading"]}>
