@@ -8,6 +8,8 @@ export const FI: ILanguage = {
 	errorDuringVerification: "Virhe vahvistuksen aikana",
 	failedToLoadChallenge: "Captcha-haasteen lataaminen epäonnistui",
 	loading: "Ladataan captchaa...",
+	missingProviderKey: "Palveluntarjoajan avain puuttuu",
+	missingPublicKey: "API-avain puuttuu",
 	noChallenge: "Ei ladattua haastetta",
 	notRobot: "En ole robotti",
 	pleaseCompleteCaptcha: "Täytä captcha ennen lähettämistä",

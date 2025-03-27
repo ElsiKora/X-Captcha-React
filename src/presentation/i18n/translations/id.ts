@@ -8,6 +8,8 @@ export const ID: ILanguage = {
 	errorDuringVerification: "Kesalahan selama verifikasi",
 	failedToLoadChallenge: "Gagal memuat tantangan captcha",
 	loading: "Memuat captcha...",
+	missingProviderKey: "Kunci penyedia tidak ditemukan",
+	missingPublicKey: "Kunci API tidak ditemukan",
 	noChallenge: "Tidak ada tantangan yang dimuat",
 	notRobot: "Saya bukan robot",
 	pleaseCompleteCaptcha: "Silakan selesaikan captcha sebelum mengirim",

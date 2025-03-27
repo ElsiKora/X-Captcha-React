@@ -9,6 +9,8 @@ export const EL: ILanguage = {
 	errorDuringVerification: "Σφάλμα κατά την επαλήθευση",
 	failedToLoadChallenge: "Αποτυχία φόρτωσης της πρόκλησης captcha",
 	loading: "Φόρτωση captcha...",
+	missingProviderKey: "Λείπει το κλειδί παρόχου",
+	missingPublicKey: "Λείπει το κλειδί API",
 	noChallenge: "Δεν φορτώθηκε πρόκληση",
 	notRobot: "Δεν είμαι ρομπότ",
 	pleaseCompleteCaptcha: "Παρακαλώ συμπληρώστε το captcha πριν την υποβολή",

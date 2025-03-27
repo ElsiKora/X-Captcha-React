@@ -5,7 +5,9 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 
 import { CaptchaWidget } from "../../src";
+import { EChallengeType } from "../../src/infrastructure/enum/challenge-type.enum";
 
+import { BACKGROUND_COLORS, CONTAINER_SIZES, DEFAULT_API_URL, DEFAULT_CHALLENGE_TYPE, DEFAULT_LANGUAGE, DEFAULT_POW_SOLVER_CONFIG, DEFAULT_PUBLIC_KEY, RESPONSE_DELAYS, SUPPORTED_LANGUAGES, THEME_COLORS, WIDGET_DIMENSIONS } from "./Constants";
 import { withContainer, withLanguage, withMockCaptchaClient, withThemeColor } from "./Decorators";
 
 /**
@@ -14,13 +16,16 @@ import { withContainer, withLanguage, withMockCaptchaClient, withThemeColor } fr
  * customizable to match your application's design.
  */
 const meta: Meta<typeof CaptchaWidget> = {
+	args: {
+		challengeType: EChallengeType.POW,
+		publicKey: DEFAULT_PUBLIC_KEY,
+	},
 	argTypes: {
 		apiUrl: {
 			control: "text",
 			description: "The URL of the captcha API",
 			table: {
-				// eslint-disable-next-line @elsikora/sonar/no-duplicate-string
-				defaultValue: { summary: "http://127.0.0.1:3000/api/captcha" },
+				defaultValue: { summary: DEFAULT_API_URL },
 				type: { summary: "string" },
 			},
 		},
@@ -28,7 +33,7 @@ const meta: Meta<typeof CaptchaWidget> = {
 			control: "color",
 			description: "Background color for the captcha widget",
 			table: {
-				defaultValue: { summary: "#fff" },
+				defaultValue: { summary: BACKGROUND_COLORS.DEFAULT },
 				type: { summary: "string" },
 			},
 		},
@@ -37,6 +42,15 @@ const meta: Meta<typeof CaptchaWidget> = {
 			description: "Color for the brand name text",
 			table: {
 				defaultValue: { summary: "#aaa" },
+				type: { summary: "string" },
+			},
+		},
+		challengeType: {
+			control: "select",
+			description: "Type of challenge to display",
+			options: Object.values(EChallengeType),
+			table: {
+				defaultValue: { summary: DEFAULT_CHALLENGE_TYPE },
 				type: { summary: "string" },
 			},
 		},
@@ -61,14 +75,14 @@ const meta: Meta<typeof CaptchaWidget> = {
 			description: "Height of the captcha widget in pixels",
 			table: {
 				// @ts-ignore
-				defaultValue: { summary: 74 },
+				defaultValue: { summary: WIDGET_DIMENSIONS.DEFAULT_HEIGHT },
 				type: { summary: "number | string" },
 			},
 		},
 		language: {
 			control: "select",
 			description: "Language for the widget text (auto-detects if not provided)",
-			options: ["ar", "bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "hi", "hu", "id", "it", "ja", "ko", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh"],
+			options: SUPPORTED_LANGUAGES,
 			table: {
 				defaultValue: { summary: "Auto-detected" },
 				type: { summary: "string" },
@@ -86,6 +100,30 @@ const meta: Meta<typeof CaptchaWidget> = {
 				type: { summary: "(token: string) => void" },
 			},
 		},
+		powSolver: {
+			control: "object",
+			description: "Configuration options for the PoW solver",
+			table: {
+				defaultValue: {
+					summary: `{ batchSize: ${String(DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE)}, maxAttempts: ${String(DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS)}, workerTimeout: ${String(DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT)} }`,
+				},
+				type: { summary: "IPowSolverConfig" },
+			},
+		},
+		publicKey: {
+			control: "text",
+			description: "The public key for the captcha API",
+			table: {
+				type: { summary: "string" },
+			},
+		},
+		secretKey: {
+			control: "text",
+			description: "The secret key for the captcha API",
+			table: {
+				type: { summary: "string" },
+			},
+		},
 		showBrandName: {
 			control: "boolean",
 			description: "Whether to show the brand name in the widget",
@@ -98,7 +136,7 @@ const meta: Meta<typeof CaptchaWidget> = {
 			control: "color",
 			description: "Theme color for the captcha widget",
 			table: {
-				defaultValue: { summary: "#4285F4" },
+				defaultValue: { summary: THEME_COLORS.BLUE },
 				type: { summary: "string" },
 			},
 		},
@@ -123,7 +161,7 @@ const meta: Meta<typeof CaptchaWidget> = {
 			description: "Width of the captcha widget in pixels",
 			table: {
 				// @ts-ignore
-				defaultValue: { summary: 300 },
+				defaultValue: { summary: WIDGET_DIMENSIONS.DEFAULT_WIDTH },
 				type: { summary: "number | string" },
 			},
 		},
@@ -143,22 +181,27 @@ export default meta;
  */
 export const Default: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:4000/api/captcha",
-		height: 74,
-
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		errorTextColor: "#d10707",
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
 		language: "uk",
-
 		onError: fn((error: unknown) => {
 			console.error("Captcha verification error:", error);
 		}),
-
 		onVerify: fn((token: string) => {
 			console.log("Captcha verified with token:", token);
 		}),
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		publicKey: "sd3w5w35",
 		themeColor: "#f142f5",
-		width: 300,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
-	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("en"), withContainer(400, 200), withThemeColor("#4285F4")],
+	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage(DEFAULT_LANGUAGE), withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT), withThemeColor(THEME_COLORS.BLUE)],
 };
 
 /**
@@ -166,12 +209,19 @@ export const Default: StoryObj<typeof CaptchaWidget> = {
  */
 export const CustomSize: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		height: 100,
-		themeColor: "#4285F4",
-		width: 400,
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.LARGE_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		publicKey: DEFAULT_PUBLIC_KEY,
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.LARGE_WIDTH,
 	},
-	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("en"), withContainer(500, 220), withThemeColor("#4285F4")],
+	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage(DEFAULT_LANGUAGE), withContainer(500, 220), withThemeColor(THEME_COLORS.BLUE)],
 };
 
 /**
@@ -179,13 +229,19 @@ export const CustomSize: StoryObj<typeof CaptchaWidget> = {
  */
 export const GreenTheme: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		height: 74,
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
 		language: "uk",
-		themeColor: "#34A853",
-		width: 300,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		themeColor: THEME_COLORS.GREEN,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
-	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("en"), withContainer(400, 200), withThemeColor("#34A853")],
+	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage(DEFAULT_LANGUAGE), withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT), withThemeColor(THEME_COLORS.GREEN)],
 };
 
 /**
@@ -193,13 +249,19 @@ export const GreenTheme: StoryObj<typeof CaptchaWidget> = {
  */
 export const CustomBackground: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		backgroundColor: "#f3f9fe",
-		height: 74,
-		themeColor: "#4285F4",
-		width: 300,
+		apiUrl: DEFAULT_API_URL,
+		backgroundColor: BACKGROUND_COLORS.LIGHT_BLUE,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
-	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("en"), withContainer(400, 200), withThemeColor("#4285F4", "#f3f9fe")],
+	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage(DEFAULT_LANGUAGE), withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT), withThemeColor(THEME_COLORS.BLUE, BACKGROUND_COLORS.LIGHT_BLUE)],
 };
 
 /**
@@ -207,13 +269,19 @@ export const CustomBackground: StoryObj<typeof CaptchaWidget> = {
  */
 export const DarkTheme: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		backgroundColor: "#1a1a1a",
-		height: 74,
-		themeColor: "#bb86fc",
-		width: 300,
+		apiUrl: DEFAULT_API_URL,
+		backgroundColor: BACKGROUND_COLORS.DARK,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: 1000,
+			maxAttempts: 1,
+			workerTimeout: 30_000,
+		},
+		themeColor: THEME_COLORS.PURPLE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
-	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("en"), withContainer(400, 200), withThemeColor("#bb86fc", "#1a1a1a")],
+	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage(DEFAULT_LANGUAGE), withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT), withThemeColor(THEME_COLORS.PURPLE, BACKGROUND_COLORS.DARK)],
 };
 
 /**
@@ -221,13 +289,19 @@ export const DarkTheme: StoryObj<typeof CaptchaWidget> = {
  */
 export const CustomBrandColor: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: DEFAULT_API_URL,
 		brandNameColor: "#3366ff",
-		height: 74,
-		themeColor: "#4285F4",
-		width: 300,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
-	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("en"), withContainer(400, 200), withThemeColor("#4285F4")],
+	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage(DEFAULT_LANGUAGE), withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT), withThemeColor(THEME_COLORS.BLUE)],
 };
 
 /**
@@ -235,13 +309,19 @@ export const CustomBrandColor: StoryObj<typeof CaptchaWidget> = {
  */
 export const HiddenBrandName: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		height: 74,
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		shouldShowBrandName: false,
-		themeColor: "#4285F4",
-		width: 300,
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
-	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("en"), withContainer(400, 200), withThemeColor("#4285F4")],
+	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage(DEFAULT_LANGUAGE), withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT), withThemeColor(THEME_COLORS.BLUE)],
 };
 
 /**
@@ -249,20 +329,26 @@ export const HiddenBrandName: StoryObj<typeof CaptchaWidget> = {
  */
 export const CustomCheckmark: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		checkmarkColor: "#ffcc00",
-		height: 74,
-		themeColor: "#4285F4",
-		width: 300,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
 	decorators: [
 		withMockCaptchaClient({
-			responseDelay: 500,
+			responseDelay: RESPONSE_DELAYS.DEFAULT,
 			shouldSucceed: true,
 		}),
-		withLanguage("en"),
-		withContainer(400, 200),
-		withThemeColor("#4285F4"),
+		withLanguage(DEFAULT_LANGUAGE),
+		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
+		withThemeColor(THEME_COLORS.BLUE),
 	],
 	play: ({ canvasElement }: any) => {
 		// Simulate user clicking on the captcha
@@ -282,22 +368,66 @@ export const CustomCheckmark: StoryObj<typeof CaptchaWidget> = {
  */
 export const CustomErrorStyling: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		errorTextColor: "#e91e63",
-		height: 74,
-		themeColor: "#4285F4",
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		themeColor: THEME_COLORS.BLUE,
 		tryAgainButtonBackgroundColor: "#e0e0e0",
 		tryAgainButtonTextColor: "#333333",
-		width: 300,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
 	decorators: [
 		withMockCaptchaClient({
-			responseDelay: 800,
+			responseDelay: RESPONSE_DELAYS.LONG,
 			shouldSucceed: false,
 		}),
-		withLanguage("en"),
-		withContainer(400, 200),
-		withThemeColor("#4285F4"),
+		withLanguage(DEFAULT_LANGUAGE),
+		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
+		withThemeColor(THEME_COLORS.BLUE),
+	],
+	play: ({ canvasElement }: any) => {
+		// Simulate user clicking on the captcha
+		const canvas: HTMLElement = canvasElement as HTMLElement;
+		const captchaContainer: Element | null = canvas.querySelector(".x-captcha-container");
+
+		if (captchaContainer) {
+			setTimeout(() => {
+				(captchaContainer as HTMLElement).click();
+			}, 1000);
+		}
+	},
+};
+
+/**
+ * CaptchaWidget with faster PoW solver.
+ */
+export const FastPowSolver: StoryObj<typeof CaptchaWidget> = {
+	args: {
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: 500,
+			maxAttempts: 1_000_000,
+			workerTimeout: 60_000,
+		},
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
+	},
+	decorators: [
+		withMockCaptchaClient({
+			responseDelay: RESPONSE_DELAYS.LONG,
+			shouldSucceed: true,
+		}),
+		withLanguage(DEFAULT_LANGUAGE),
+		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
+		withThemeColor(THEME_COLORS.BLUE),
 	],
 	play: ({ canvasElement }: any) => {
 		// Simulate user clicking on the captcha
@@ -317,19 +447,25 @@ export const CustomErrorStyling: StoryObj<typeof CaptchaWidget> = {
  */
 export const SuccessfulVerification: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		height: 74,
-		themeColor: "#4285F4",
-		width: 300,
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
 	decorators: [
 		withMockCaptchaClient({
-			responseDelay: 800,
+			responseDelay: RESPONSE_DELAYS.LONG,
 			shouldSucceed: true,
 		}),
-		withLanguage("en"),
-		withContainer(400, 200),
-		withThemeColor("#4285F4"),
+		withLanguage(DEFAULT_LANGUAGE),
+		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
+		withThemeColor(THEME_COLORS.BLUE),
 	],
 	play: ({ canvasElement }: any) => {
 		// Simulate user clicking on the captcha
@@ -349,19 +485,25 @@ export const SuccessfulVerification: StoryObj<typeof CaptchaWidget> = {
  */
 export const FailedVerification: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:4000/api/captcha",
-		height: 74,
-		themeColor: "#4285F4",
-		width: 300,
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
 	decorators: [
 		withMockCaptchaClient({
-			responseDelay: 800,
+			responseDelay: RESPONSE_DELAYS.LONG,
 			shouldSucceed: false,
 		}),
-		withLanguage("en"),
-		withContainer(400, 200),
-		withThemeColor("#4285F4"),
+		withLanguage(DEFAULT_LANGUAGE),
+		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
+		withThemeColor(THEME_COLORS.BLUE),
 	],
 	play: ({ canvasElement }: any) => {
 		// Simulate user clicking on the captcha
@@ -381,19 +523,25 @@ export const FailedVerification: StoryObj<typeof CaptchaWidget> = {
  */
 export const SlowNetwork: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		height: 74,
-		themeColor: "#4285F4",
-		width: 300,
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
 	decorators: [
 		withMockCaptchaClient({
-			responseDelay: 3000,
+			responseDelay: RESPONSE_DELAYS.SLOW_NETWORK,
 			shouldSucceed: true,
 		}),
-		withLanguage("en"),
-		withContainer(400, 200),
-		withThemeColor("#4285F4"),
+		withLanguage(DEFAULT_LANGUAGE),
+		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
+		withThemeColor(THEME_COLORS.BLUE),
 	],
 };
 
@@ -402,13 +550,19 @@ export const SlowNetwork: StoryObj<typeof CaptchaWidget> = {
  */
 export const RussianLanguage: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		height: 74,
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
 		language: "ru",
-		themeColor: "#4285F4",
-		width: 300,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
-	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("ru"), withContainer(400, 200), withThemeColor("#4285F4")],
+	decorators: [withMockCaptchaClient({ shouldSucceed: true }), withLanguage("ru"), withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT), withThemeColor(THEME_COLORS.BLUE)],
 };
 
 /**
@@ -416,18 +570,46 @@ export const RussianLanguage: StoryObj<typeof CaptchaWidget> = {
  */
 export const NetworkTimeout: StoryObj<typeof CaptchaWidget> = {
 	args: {
-		apiUrl: "http://127.0.0.1:3000/api/captcha",
-		height: 74,
-		themeColor: "#4285F4",
-		width: 300,
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
 	decorators: [
 		withMockCaptchaClient({
-			responseDelay: 1000,
+			responseDelay: RESPONSE_DELAYS.LONG,
 			shouldTimeout: true,
 		}),
-		withLanguage("en"),
-		withContainer(400, 200),
-		withThemeColor("#4285F4"),
+		withLanguage(DEFAULT_LANGUAGE),
+		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
+		withThemeColor(THEME_COLORS.BLUE),
+	],
+};
+
+/**
+ * CaptchaWidget with click challenge type.
+ */
+export const ClickChallenge: StoryObj<typeof CaptchaWidget> = {
+	args: {
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.CLICK,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
+	},
+	decorators: [
+		withMockCaptchaClient({
+			responseDelay: RESPONSE_DELAYS.DEFAULT,
+			shouldSucceed: true,
+		}),
+		withLanguage(DEFAULT_LANGUAGE),
+		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
+		withThemeColor(THEME_COLORS.BLUE),
 	],
 };

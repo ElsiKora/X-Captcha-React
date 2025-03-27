@@ -34,6 +34,11 @@ export interface ICaptchaFormProperties extends Omit<ICaptchaWidgetProperties, "
 	onSubmit: (token: string, event: FormEvent) => void;
 
 	/**
+	 * Public key for the captcha widget (required)
+	 */
+	publicKey: string;
+
+	/**
 	 * Submit button text
 	 */
 	submitButtonText?: string;

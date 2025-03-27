@@ -1,8 +1,12 @@
 /* eslint-disable @elsikora/react/1/no-use-context */
-import type { ICaptchaContext, ICaptchaProviderProperties } from "../interface";
+import type { ICaptchaContext, ICaptchaProviderProperties, ILanguage } from "../interface";
 
-import { CaptchaClient } from "@elsikora/x-captcha-client";
+import { XCaptchaApiClient } from "@elsikora/x-captcha-client";
 import React, { createContext, useContext, useMemo } from "react";
+
+import { createTranslator, detectLanguage } from "../i18n";
+
+import styles from "../styles/captcha-widget.module.css";
 
 // Create the context
 const CaptchaContext: React.Context<ICaptchaContext | null> = createContext<ICaptchaContext | null>(null);
@@ -12,13 +16,41 @@ const CaptchaContext: React.Context<ICaptchaContext | null> = createContext<ICap
  * @param {ICaptchaProviderProperties} properties The properties for the provider
  * @returns {React.ReactElement} The provider component
  */
-export const CaptchaProvider: React.FC<ICaptchaProviderProperties> = ({ apiUrl, children }: ICaptchaProviderProperties): React.ReactElement => {
+export const CaptchaProvider: React.FC<ICaptchaProviderProperties> = ({ apiUrl, children, language, publicKey }: ICaptchaProviderProperties): React.ReactElement => {
+	// Check if publicKey is provided
+	const isMissingPublicKey: boolean = !publicKey;
+
+	// Initialize translation function
+	const translate: (key: keyof ILanguage) => string = useMemo(() => {
+		const detectedLanguage: string = language ?? detectLanguage();
+
+		return createTranslator(detectedLanguage);
+	}, [language]);
+
 	// Create a memoized client instance to avoid unnecessary re-renders
-	const client: CaptchaClient = useMemo(() => new CaptchaClient({ apiUrl }), [apiUrl]);
+	const client: null | XCaptchaApiClient = useMemo(() => {
+		if (!publicKey) {
+			return null;
+		}
+
+		return new XCaptchaApiClient({ apiKey: publicKey, baseUrl: apiUrl, secretKey: "" });
+	}, [apiUrl, publicKey]);
+
+	// If publicKey is missing, render an error message in captcha error style
+	if (isMissingPublicKey) {
+		return (
+			<div className={styles["x-captcha-widget"]} style={{ height: "74px", width: "100%" }}>
+				<div className={styles["x-captcha-error"]}>
+					<div>{translate("missingProviderKey")}</div>
+				</div>
+			</div>
+		);
+	}
 
 	const value: ICaptchaContext = useMemo(
 		() => ({
-			client,
+			// eslint-disable-next-line @elsikora/typescript/no-non-null-assertion
+			client: client!,
 		}),
 		[client],
 	);

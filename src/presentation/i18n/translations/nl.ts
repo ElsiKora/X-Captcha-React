@@ -8,6 +8,8 @@ export const NL: ILanguage = {
 	errorDuringVerification: "Fout tijdens verificatie",
 	failedToLoadChallenge: "Kon captcha-uitdaging niet laden",
 	loading: "Captcha laden...",
+	missingProviderKey: "Provider-sleutel ontbreekt",
+	missingPublicKey: "API-sleutel ontbreekt",
 	noChallenge: "Geen uitdaging geladen",
 	notRobot: "Ik ben geen robot",
 	pleaseCompleteCaptcha: "Voltooi de captcha voordat u verzendt",

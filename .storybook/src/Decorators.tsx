@@ -1,5 +1,5 @@
 /* eslint-disable @elsikora/typescript/no-magic-numbers */
-import type { CaptchaClient } from "@elsikora/x-captcha-client";
+import type { XCaptchaApiClient } from "@elsikora/x-captcha-client";
 import type { Decorator, ReactRenderer, StrictArgs } from "@storybook/react";
 import type { StoryContext, StoryContextUpdate } from "@storybook/types";
 import type { ReactElement } from "react";
@@ -8,6 +8,7 @@ import type { TFormSubmitHandler } from "./type";
 
 import React from "react";
 
+import { CONTAINER_SIZES, DEFAULT_API_URL, DEFAULT_LANGUAGE, DEFAULT_PUBLIC_KEY, RESPONSE_DELAYS, SUPPORTED_LANGUAGES, THEME_COLORS } from "./Constants";
 import { MockCaptchaClient, mockFormHandlers } from "./mocks";
 
 /**
@@ -15,16 +16,14 @@ import { MockCaptchaClient, mockFormHandlers } from "./mocks";
  * @param {string} languageCode - The language code to use
  * @returns {Decorator} A decorator function
  */
-export const withLanguage = (languageCode: string = "en"): Decorator => {
+export const withLanguage = (languageCode: string = DEFAULT_LANGUAGE): Decorator => {
 	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"], context: StoryContext<ReactRenderer, StrictArgs>) => {
 		// Allow overriding the language from Story args
 
 		const effectiveLanguage: string = (context.args?.language as string) ?? languageCode;
 
-		const supportedLanguages: Array<string> = ["ar", "bg", "cs", "da", "de", "el", "en", "es", "fi", "fr", "he", "hi", "hu", "id", "it", "ja", "ko", "nl", "no", "pl", "pt", "ro", "ru", "sk", "sv", "th", "tr", "uk", "vi", "zh"];
-
-		const language: string = supportedLanguages.includes(effectiveLanguage) ? effectiveLanguage : "en";
+		const language: string = SUPPORTED_LANGUAGES.includes(effectiveLanguage) ? effectiveLanguage : DEFAULT_LANGUAGE;
 
 		return (
 			<div className={"language-context"} data-language={language}>
@@ -52,18 +51,21 @@ export const withMockCaptchaClient = (
 	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"], context: StoryContext<ReactRenderer, StrictArgs>) => {
 		// Create a mock client for the story
-		const apiUrl: string = (context.args.apiUrl as string) ?? "http://127.0.0.1:3000/api/captcha";
+		const apiUrl: string = (context.args.apiUrl as string) ?? DEFAULT_API_URL;
+		const publicKey: string = (context.args.publicKey as string) ?? DEFAULT_PUBLIC_KEY;
 
 		// Mock the CaptchaClient before rendering
 		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-		const originalCaptchaClient: CaptchaClient = (globalThis as any).CaptchaClient as CaptchaClient;
+		const originalCaptchaClient: XCaptchaApiClient = (globalThis as any).XCaptchaApiClient as XCaptchaApiClient;
 
 		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-		(globalThis as any).CaptchaClient = MockCaptchaClient;
+		(globalThis as any).XCaptchaApiClient = MockCaptchaClient;
 		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
 		(globalThis as any).CaptchaClientOptions = {
-			apiUrl,
-			responseDelay: options.responseDelay ?? 500,
+			baseUrl: apiUrl,
+			publicKey,
+			responseDelay: options.responseDelay ?? RESPONSE_DELAYS.DEFAULT,
+			secretKey: "",
 			shouldSucceed: options.shouldSucceed ?? true,
 			shouldTimeout: options.shouldTimeout ?? false,
 		};
@@ -75,7 +77,7 @@ export const withMockCaptchaClient = (
 		React.useEffect(() => {
 			return (): void => {
 				// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-				(globalThis as any).CaptchaClient = originalCaptchaClient;
+				(globalThis as any).XCaptchaApiClient = originalCaptchaClient;
 				// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
 				delete (globalThis as any).CaptchaClientOptions;
 			};
@@ -91,7 +93,7 @@ export const withMockCaptchaClient = (
  * @param {number | string} height - The height of the container
  * @returns {Decorator} A decorator function
  */
-export const withContainer = (width: number | string = 400, height: number | string = 200): Decorator => {
+export const withContainer = (width: number | string = CONTAINER_SIZES.DEFAULT.WIDTH, height: number | string = CONTAINER_SIZES.DEFAULT.HEIGHT): Decorator => {
 	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"]) => {
 		return (
@@ -118,7 +120,7 @@ export const withContainer = (width: number | string = 400, height: number | str
  * @param {string} backgroundColor - The background color to use
  * @returns {Decorator} A decorator function
  */
-export const withThemeColor = (themeColor: string = "#4285F4", backgroundColor?: string): Decorator => {
+export const withThemeColor = (themeColor: string = THEME_COLORS.BLUE, backgroundColor?: string): Decorator => {
 	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"], context: StoryContext<ReactRenderer, StrictArgs>) => {
 		// Allow overriding the theme color and background color from Story args

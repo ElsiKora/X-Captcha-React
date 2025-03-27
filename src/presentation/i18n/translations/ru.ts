@@ -8,6 +8,8 @@ export const RU: ILanguage = {
 	errorDuringVerification: "Ошибка во время проверки",
 	failedToLoadChallenge: "Не удалось загрузить капчу",
 	loading: "Загрузка капчи...",
+	missingProviderKey: "Ошибка конфигурации: не предоставлен ключ безопасности. Обратитесь в службу поддержки.",
+	missingPublicKey: "Отсутствует ключ безопасности. Обратитесь к администратору сайта.",
 	noChallenge: "Нет доступной капчи",
 	notRobot: "Я не робот",
 	pleaseCompleteCaptcha: "Пожалуйста, пройдите проверку капчи перед отправкой",

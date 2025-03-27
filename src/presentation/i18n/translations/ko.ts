@@ -8,6 +8,8 @@ export const KO: ILanguage = {
 	errorDuringVerification: "인증 중 오류 발생",
 	failedToLoadChallenge: "캡차 챌린지를 로드하지 못했습니다",
 	loading: "캡차 로딩 중...",
+	missingProviderKey: "제공자 키가 없습니다",
+	missingPublicKey: "API 키가 없습니다",
 	noChallenge: "로드된 챌린지 없음",
 	notRobot: "로봇이 아닙니다",
 	pleaseCompleteCaptcha: "제출하기 전에 캡차를 완료해 주세요",
