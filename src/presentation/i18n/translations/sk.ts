@@ -8,6 +8,8 @@ export const SK: ILanguage = {
 	errorDuringVerification: "Chyba počas overenia",
 	failedToLoadChallenge: "Nepodarilo sa načítať captcha výzvu",
 	loading: "Načítava sa captcha...",
+	missingProviderKey: "Chýbajúci kľúč poskytovateľa",
+	missingPublicKey: "Chýbajúci API kľúč",
 	noChallenge: "Nenačítala sa žiadna výzva",
 	notRobot: "Nie som robot",
 	pleaseCompleteCaptcha: "Pred odoslaním vyplňte captcha",

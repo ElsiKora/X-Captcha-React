@@ -8,6 +8,8 @@ export const EN: ILanguage = {
 	errorDuringVerification: "Error during verification",
 	failedToLoadChallenge: "Failed to load captcha challenge",
 	loading: "Loading captcha...",
+	missingProviderKey: "Configuration error: Security key not provided. Please contact support.",
+	missingPublicKey: "Security key missing. Please contact the site administrator.",
 	noChallenge: "No challenge loaded",
 	notRobot: "I'm not a robot",
 	pleaseCompleteCaptcha: "Please complete the captcha before submitting",

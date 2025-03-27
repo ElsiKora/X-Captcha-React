@@ -8,6 +8,8 @@ export const IT: ILanguage = {
 	errorDuringVerification: "Errore durante la verifica",
 	failedToLoadChallenge: "Impossibile caricare la sfida captcha",
 	loading: "Caricamento captcha...",
+	missingProviderKey: "Chiave del provider mancante",
+	missingPublicKey: "Chiave API mancante",
 	noChallenge: "Nessuna sfida caricata",
 	notRobot: "Non sono un robot",
 	pleaseCompleteCaptcha: "Completa il captcha prima di inviare",

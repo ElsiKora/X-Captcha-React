@@ -3,7 +3,7 @@ import type { ICaptchaWidgetProperties } from "./captcha-widget-properties.inter
 /**
  * Interface for captcha theme properties
  */
-export interface ICaptchaThemeProperties extends Omit<ICaptchaWidgetProperties, "apiUrl" | "height" | "language" | "onError" | "onVerify" | "shouldShowBrandName" | "width"> {
+export interface ICaptchaThemeProperties extends Omit<ICaptchaWidgetProperties, "apiUrl" | "challengeType" | "height" | "language" | "onError" | "onVerify" | "powSolver" | "publicKey" | "secretKey" | "shouldShowBrandName" | "width"> {
 	/**
 	 * Button color theme (for CaptchaForm)
 	 */

@@ -1,0 +1,24 @@
+const BOX_HEIGHT: number = 74;
+const BOX_WIDTH: number = 300;
+const VERIFY_FAKE_DELAY: number = 1500;
+const LOADING_FAKE_DELAY: number = 800;
+const ON_VERIFY_DELAY: number = 300;
+const RETRY_DELAY: number = 500;
+
+const CAPTCHA_WIDGET_CONSTANT: {
+	BOX_HEIGHT: number;
+	BOX_WIDTH: number;
+	LOADING_FAKE_DELAY: number;
+	ON_VERIFY_DELAY: number;
+	RETRY_DELAY: number;
+	VERIFY_FAKE_DELAY: number;
+} = {
+	BOX_HEIGHT,
+	BOX_WIDTH,
+	LOADING_FAKE_DELAY,
+	ON_VERIFY_DELAY,
+	RETRY_DELAY,
+	VERIFY_FAKE_DELAY,
+};
+
+export default CAPTCHA_WIDGET_CONSTANT;

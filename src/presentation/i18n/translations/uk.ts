@@ -8,6 +8,8 @@ export const UK: ILanguage = {
 	errorDuringVerification: "Помилка під час перевірки",
 	failedToLoadChallenge: "Не вдалося завантажити завдання captcha",
 	loading: "Завантаження captcha...",
+	missingProviderKey: "Відсутній ключ постачальника",
+	missingPublicKey: "Відсутній API ключ",
 	noChallenge: "Завдання не завантажено",
 	notRobot: "Я не робот",
 	pleaseCompleteCaptcha: "Будь ласка, заповніть captcha перед відправленням",

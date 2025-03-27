@@ -1,0 +1,10 @@
+{
+  "version": "v1",
+  "packages": {
+    "@elsikora/x-captcha-client": {
+      "signature": "309b6f00465c10c522308221bf368e6d",
+      "file": true,
+      "replaced": "^1.0.2"
+    }
+  }
+}

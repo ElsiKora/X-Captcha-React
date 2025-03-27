@@ -8,6 +8,8 @@ export const CS: ILanguage = {
 	errorDuringVerification: "Chyba během ověření",
 	failedToLoadChallenge: "Nepodařilo se načíst captcha výzvu",
 	loading: "Načítání captcha...",
+	missingProviderKey: "Chybí klíč poskytovatele",
+	missingPublicKey: "Chybí API klíč",
 	noChallenge: "Žádná výzva nenačtena",
 	notRobot: "Nejsem robot",
 	pleaseCompleteCaptcha: "Před odesláním vyplňte captcha",

@@ -3,12 +3,12 @@
 </p>
 
 <h1 align="center">X-Captcha-React 🛡️</h1>
-<p align="center"><em>Elegant React components for X-Captcha integration</em></p>
+<p align="center"><em>Modern, customizable React components for the X-Captcha service</em></p>
 
 <p align="center">
     <a aria-label="ElsiKora logo" href="https://elsikora.com">
   <img src="https://img.shields.io/badge/MADE%20BY%20ElsiKora-333333.svg?style=for-the-badge" alt="ElsiKora">
-</a> <img src="https://img.shields.io/badge/version-blue.svg?style=for-the-badge&logo=react&logoColor=white" alt="version"> <img src="https://img.shields.io/badge/npm-red.svg?style=for-the-badge&logo=npm&logoColor=white" alt="npm"> <img src="https://img.shields.io/badge/license-green.svg?style=for-the-badge&logo=license&logoColor=white" alt="license"> <img src="https://img.shields.io/badge/typescript-blue.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript"> <img src="https://img.shields.io/badge/react-blue.svg?style=for-the-badge&logo=react&logoColor=white" alt="react"> <img src="https://img.shields.io/badge/rollup-orange.svg?style=for-the-badge&logo=rollup.js&logoColor=white" alt="rollup">
+</a> <img src="https://img.shields.io/badge/npm-blue.svg?style=for-the-badge&logo=npm&logoColor=white" alt="npm"> <img src="https://img.shields.io/badge/version-green.svg?style=for-the-badge&logo=semver&logoColor=white" alt="version"> <img src="https://img.shields.io/badge/react-61DAFB.svg?style=for-the-badge&logo=react&logoColor=white" alt="react"> <img src="https://img.shields.io/badge/typescript-3178C6.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="typescript"> <img src="https://img.shields.io/badge/license-yellow.svg?style=for-the-badge&logo=license&logoColor=white" alt="license">
 </p>
 
 
@@ -23,19 +23,19 @@
 
 
 ## 📖 Description
-X-Captcha-React provides a set of modern, customizable React components that make integrating X-Captcha verification into your applications simple and effective. This library bridges your React application with X-Captcha's security services, offering user-friendly CAPTCHA challenges that help protect your forms against bot submissions while maintaining an excellent user experience. With support for multiple languages, extensive theming options, and various integration methods, X-Captcha-React is perfect for developers looking to add robust security layers to their forms with minimal effort. It's built with TypeScript, offering type safety and excellent developer experience while ensuring your users get a smooth verification flow.
+X-Captcha-React provides elegant, fully customizable React components for integrating X-Captcha verification services into your web applications. With support for multiple challenge types (including Proof of Work and Click verification), extensive internationalization (30+ languages), and complete theming capabilities, X-Captcha-React makes it simple to protect your forms from bots while maintaining a seamless user experience. Whether you're building a login form, registration page, or contact form, X-Captcha-React offers the perfect balance between security and usability.
 
 ## 🚀 Features
-- ✨ **🌍 Multi-language support with auto-detection (English and Russian included)**
-- ✨ **🎨 Extensive theming options with customizable colors, sizes, and styles**
-- ✨ **⚡ Optimized performance with minimal dependencies**
-- ✨ **🔄 Smooth animations and transitions for enhanced user experience**
-- ✨ **📱 Responsive design that works across all device sizes**
-- ✨ **🧩 Simple integration with existing forms or as standalone components**
-- ✨ **⚙️ Dual module formats (ESM and CommonJS) for maximum compatibility**
-- ✨ **🔒 Secure CAPTCHA verification to protect against automated bots**
-- ✨ **🛠️ TypeScript support with comprehensive type definitions**
-- ✨ **🔍 Accessibility-focused design for inclusive user experience**
+- ✨ **Multiple challenge types support (Proof of Work and Click verification)**
+- ✨ **Comprehensive internationalization with 30+ languages out-of-the-box**
+- ✨ **Complete theming with customizable colors, sizes, and animations**
+- ✨ **Accessible design with keyboard navigation and screen reader support**
+- ✨ **Form integration with built-in validation and error handling**
+- ✨ **Optimized Web Worker implementation for Proof of Work challenges**
+- ✨ **Lightweight footprint with minimal dependencies**
+- ✨ **TypeScript support with comprehensive type definitions**
+- ✨ **Server-side rendering compatible**
+- ✨ **Responsive design that works across all device sizes**
 
 ## 🛠 Installation
 ```bash
@@ -47,281 +47,272 @@ yarn add @elsikora/x-captcha-react
 
 # Using pnpm
 pnpm add @elsikora/x-captcha-react
+
+# Using bun
+bun add @elsikora/x-captcha-react
 ```
 
 ## 💡 Usage
 ## Basic Usage
 
-The simplest way to add CAPTCHA to your form is using the `CaptchaForm` component:
+The simplest way to use X-Captcha-React is with the `CaptchaWidget` component:
 
-```jsx
-import { CaptchaForm } from '@elsikora/x-captcha-react';
+```tsx
+import { CaptchaWidget } from '@elsikora/x-captcha-react';
 import React from 'react';
 
-const SimpleForm = () => {
-  const handleSubmit = (token, event) => {
-    console.log('Form submitted with token:', token);
-    // Submit form data with the token to your backend
+function MyForm() {
+  const handleVerify = (token: string) => {
+    console.log('Verification successful!', token);
+    // Send the token to your server for validation
+  };
+
+  const handleError = (error: string) => {
+    console.error('Verification failed:', error);
   };
 
   return (
-    <CaptchaForm 
-      apiUrl="https://your-x-captcha-server.com/api" 
+    <div>
+      <h2>Contact Form</h2>
+      <CaptchaWidget
+        apiUrl="https://api.x-captcha.com"
+        publicKey="your-public-key"
+        challengeType="click"
+        onVerify={handleVerify}
+        onError={handleError}
+      />
+    </div>
+  );
+}
+```
+
+## Complete Form Integration
+
+For a more complete solution, use the `CaptchaForm` component which includes the widget and form handling:
+
+```tsx
+import { CaptchaForm } from '@elsikora/x-captcha-react';
+import React, { FormEvent } from 'react';
+
+function ContactForm() {
+  const handleSubmit = (token: string, event: FormEvent) => {
+    // Access form data
+    const formData = new FormData(event.target as HTMLFormElement);
+    
+    // Submit to your server with the captcha token
+    fetch('/api/contact', {
+      method: 'POST',
+      body: JSON.stringify({
+        name: formData.get('name'),
+        email: formData.get('email'),
+        message: formData.get('message'),
+        captchaToken: token
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  };
+
+  return (
+    <CaptchaForm
+      apiUrl="https://api.x-captcha.com"
+      publicKey="your-public-key"
+      challengeType="click"
       onSubmit={handleSubmit}
       submitButtonText="Send Message"
     >
-      <input type="text" name="name" placeholder="Your Name" />
-      <textarea name="message" placeholder="Your Message"></textarea>
+      <div className="form-group">
+        <label htmlFor="name">Name</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div className="form-group">
+        <label htmlFor="email">Email</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <div className="form-group">
+        <label htmlFor="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
     </CaptchaForm>
   );
-};
+}
 ```
 
-## Advanced Usage with Context Provider
+## Using the CaptchaProvider
 
-For more complex applications, you can use the `CaptchaProvider` at a higher level in your component tree:
+For applications that use captcha in multiple places, use the `CaptchaProvider`:
 
-```jsx
+```tsx
 import { CaptchaProvider, CaptchaWidget } from '@elsikora/x-captcha-react';
-import React, { useState } from 'react';
+import React from 'react';
 
-const App = () => {
+function App() {
   return (
-    <CaptchaProvider apiUrl="https://your-x-captcha-server.com/api">
-      <MyForm />
+    <CaptchaProvider
+      apiUrl="https://api.x-captcha.com"
+      publicKey="your-public-key"
+    >
+      <div className="app-container">
+        <Header />
+        <MainContent />
+        <Footer />
+      </div>
     </CaptchaProvider>
   );
-};
+}
 
-const MyForm = () => {
-  const [token, setToken] = useState(null);
-  const [error, setError] = useState(null);
-  
-  const handleVerify = (token) => {
-    setToken(token);
-    setError(null);
-  };
-  
-  const handleError = (errorMessage) => {
-    setToken(null);
-    setError(errorMessage);
-  };
-  
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!token) {
-      setError('Please complete the captcha before submitting');
-      return;
-    }
-    
-    // Your submission logic here
-    console.log('Form submitted with token:', token);
+// Then in your components:
+function LoginForm() {
+  const handleVerify = (token: string) => {
+    // Handle verification
   };
   
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="email" placeholder="Email" required />
-      <CaptchaWidget 
-        onVerify={handleVerify} 
-        onError={handleError} 
+    <form>
+      <input type="email" placeholder="Email" />
+      <input type="password" placeholder="Password" />
+      <CaptchaWidget
+        challengeType="pow"
+        onVerify={handleVerify}
       />
-      {error && <div className="error">{error}</div>}
-      <button type="submit" disabled={!token}>Submit</button>
+      <button type="submit">Login</button>
     </form>
   );
-};
+}
 ```
 
-## Customizing Theme and Appearance
+## Customizing the Theme
 
 X-Captcha-React offers extensive theming options:
 
-```jsx
+```tsx
 import { CaptchaWidget } from '@elsikora/x-captcha-react';
 import React from 'react';
 
-const ThemedCaptcha = () => {
+function CustomThemedCaptcha() {
   return (
-    <CaptchaWidget 
-      apiUrl="https://your-x-captcha-server.com/api"
-      // Core theme color (used for spinner, animations, etc)
-      themeColor="#6200ea" 
-      // Background of the widget
-      backgroundColor="#f5f5f5" 
-      // Text color for the brand name
-      brandNameColor="#555555" 
-      // Color for the checkmark when verified
-      checkmarkColor="#00c853" 
-      // Color for error messages
-      errorTextColor="#d50000" 
-      // Button styling
-      tryAgainButtonBackgroundColor="#eeeeee"
-      tryAgainButtonTextColor="#212121"
+    <CaptchaWidget
+      apiUrl="https://api.x-captcha.com"
+      publicKey="your-public-key"
+      challengeType="click"
+      
+      // Theme customization
+      themeColor="#6200EA"
+      backgroundColor="#F5F5F5"
+      brandNameColor="#757575"
+      checkmarkColor="#00C853"
+      errorTextColor="#D50000"
+      tryAgainButtonBackgroundColor="#E0E0E0"
+      tryAgainButtonTextColor="#424242"
+      
       // Size customization
       width={320}
       height={80}
-      // Language setting ("en" or "ru")
-      language="en"
-      // Hide the brand name if needed
-      shouldShowBrandName={true}
-      onVerify={(token) => console.log('Verified with token:', token)}
-      onError={(error) => console.error('Captcha error:', error)}
     />
   );
-};
+}
 ```
 
-## Internationalization (i18n)
+## Language Customization
 
-X-Captcha-React supports multiple languages with automatic detection:
-
-```jsx
-import { CaptchaForm } from '@elsikora/x-captcha-react';
-import React from 'react';
-
-const LocalizedForm = () => {
-  return (
-    <CaptchaForm 
-      apiUrl="https://your-x-captcha-server.com/api"
-      // Explicitly set language to Russian
-      language="ru"
-      onSubmit={(token, event) => {
-        console.log('Form submitted with token:', token);
-      }}
-    >
-      <input type="email" placeholder="Электронная почта" />
-    </CaptchaForm>
-  );
-};
-```
-
-## TypeScript Usage
-
-The library includes comprehensive TypeScript definitions:
+X-Captcha-React supports 30+ languages with automatic detection:
 
 ```tsx
-import { CaptchaWidget, ICaptchaWidgetProperties } from '@elsikora/x-captcha-react';
-import React, { FC } from 'react';
-
-interface Props {
-  formId: string;
-}
-
-const CaptchaComponent: FC<Props> = ({ formId }) => {
-  // Type-safe properties
-  const captchaProps: ICaptchaWidgetProperties = {
-    apiUrl: 'https://your-x-captcha-server.com/api',
-    themeColor: '#1976d2',
-    onVerify: (token: string) => {
-      console.log(`Form ${formId} verified with token:`, token);
-    },
-    onError: (error: string) => {
-      console.error(`Form ${formId} captcha error:`, error);
-    }
-  };
-
-  return <CaptchaWidget {...captchaProps} />;
-};
-```
-
-## Integration with Form Libraries
-
-### With React Hook Form
-
-```jsx
 import { CaptchaWidget } from '@elsikora/x-captcha-react';
 import React from 'react';
-import { useForm } from 'react-hook-form';
 
-const HookFormExample = () => {
-  const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm();
-  const [captchaToken, setCaptchaToken] = React.useState(null);
-  const [captchaError, setCaptchaError] = React.useState(null);
-  
-  const onSubmit = (data) => {
-    if (!captchaToken) {
-      setCaptchaError('Please complete the captcha verification');
-      return;
-    }
-    
-    // Include the captcha token with your form data
-    const formData = {
-      ...data,
-      captchaToken
-    };
-    
-    console.log('Submitting form with data:', formData);
-    // Your API submission logic here
-  };
-  
+function MultiLanguageCaptcha() {
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register('email', { required: 'Email is required' })} placeholder="Email" />
-      {errors.email && <p>{errors.email.message}</p>}
-      
-      <CaptchaWidget 
-        apiUrl="https://your-x-captcha-server.com/api"
-        onVerify={(token) => {
-          setCaptchaToken(token);
-          setCaptchaError(null);
-        }}
-        onError={(error) => {
-          setCaptchaToken(null);
-          setCaptchaError(error);
-        }}
+    <div>
+      {/* Will auto-detect the user's browser language */}
+      <CaptchaWidget
+        apiUrl="https://api.x-captcha.com"
+        publicKey="your-public-key"
+        challengeType="click"
       />
-      {captchaError && <p className="error">{captchaError}</p>}
       
-      <button type="submit" disabled={isSubmitting || !captchaToken}>
-        {isSubmitting ? 'Submitting...' : 'Submit'}
-      </button>
-    </form>
+      {/* Or specify a language */}
+      <CaptchaWidget
+        apiUrl="https://api.x-captcha.com"
+        publicKey="your-public-key"
+        challengeType="click"
+        language="fr"
+      />
+    </div>
   );
-};
+}
+```
+
+## Advanced: Proof of Work Configuration
+
+For Proof of Work challenges, you can customize the solver:
+
+```tsx
+import { CaptchaWidget } from '@elsikora/x-captcha-react';
+import { EChallengeType } from '@elsikora/x-captcha-react';
+import React from 'react';
+
+function AdvancedPowCaptcha() {
+  return (
+    <CaptchaWidget
+      apiUrl="https://api.x-captcha.com"
+      publicKey="your-public-key"
+      challengeType={EChallengeType.POW}
+      powSolver={{
+        batchSize: 2000,        // Number of attempts per batch
+        maxAttempts: 2000000,   // Maximum number of attempts
+        workerTimeout: 60000    // Timeout in milliseconds
+      }}
+    />
+  );
+}
 ```
 
 ## 🛣 Roadmap
 | Task / Feature | Status |
-|---------------|--------|
-| ## Future Development Plans | 🚧 In Progress |
-| - Add support for more languages | 🚧 In Progress |
-| - Create advanced CAPTCHA challenge types | 🚧 In Progress |
-| - Develop improved accessibility features | 🚧 In Progress |
-| - Add support for server-side rendering (SSR) with Next.js | 🚧 In Progress |
-| - Implement more integrations with popular form libraries | 🚧 In Progress |
-| - Add analytics features to monitor CAPTCHA performance | 🚧 In Progress |
-| - Build a development toolkit for testing CAPTCHA in local environments | 🚧 In Progress |
-| - Create a React Native version for mobile applications | 🚧 In Progress |
-| (done) 🌍 Multi-language support with auto-detection (English and Russian included) | 🚧 In Progress |
-| (done) 🎨 Extensive theming options with customizable colors, sizes, and styles | 🚧 In Progress |
-| (done) ⚡ Optimized performance with minimal dependencies | 🚧 In Progress |
+|-----------------|--------|
+| Core Captcha Widget Component | ✅ Done |
+| Captcha Form Integration | ✅ Done |
+| Proof of Work Challenge Support | ✅ Done |
+| Click Challenge Support | ✅ Done |
+| Multi-language Support (30+ languages) | ✅ Done |
+| Comprehensive Theming Options | ✅ Done |
+| Web Worker Optimization | ✅ Done |
+| Form Validation and Error Handling | ✅ Done |
+| React Context Provider | ✅ Done |
+| TypeScript Type Definitions | ✅ Done |
+| Advanced Animation & Transitions | 🚧 In Progress |
+| Documentation Website | 🚧 In Progress |
+| Code Splitting for Smaller Bundle Size | 🚧 In Progress |
+| More Challenge Types Support | 🚧 In Progress |
+| Accessibility Improvements (ARIA) | 🚧 In Progress |
+| Visual Customization Options | 🚧 In Progress |
+| Server-Side Rendering Optimization | 🚧 In Progress |
+| Performance Benchmarking & Optimization | 🚧 In Progress |
+| React Native Support | 🚧 In Progress |
+| Interactive Component Playground | 🚧 In Progress |
 
 ## ❓ FAQ
 ## Frequently Asked Questions
 
 ### What is X-Captcha?
-X-Captcha is a CAPTCHA service that helps protect your web forms and applications from spam and abuse by verifying that users are human rather than bots.
+X-Captcha is a modern CAPTCHA service designed to protect web applications from bots and automated abuse while providing a user-friendly experience. This React library provides components to easily integrate X-Captcha into React applications.
 
-### How does X-Captcha-React differ from other CAPTCHA solutions?
-X-Captcha-React is specifically designed for React applications, providing seamless integration with React components and hooks. It offers extensive customization options and a developer-friendly experience with TypeScript support.
+### How does the Proof of Work challenge work?
+The Proof of Work challenge requires the client's browser to perform computational work before submitting a form. This approach is privacy-friendly (no tracking) and effectively prevents automated submissions while being unobtrusive to real users.
 
 ### Is X-Captcha-React accessible?
-Yes, we've designed the components with accessibility in mind, ensuring they work well with screen readers and keyboard navigation.
+Yes, X-Captcha-React is designed with accessibility in mind. It supports keyboard navigation, has appropriate ARIA attributes, and includes clear visual cues for various states.
 
-### Can I customize the look and feel of the CAPTCHA widget?
-Absolutely! X-Captcha-React provides extensive theming options allowing you to customize colors, sizes, and even some behavior aspects to match your application's design.
+### Can I use X-Captcha-React with Next.js?
+Yes, X-Captcha-React is compatible with Next.js applications, including those using the App Router. Just be mindful of client-side vs. server-side rendering considerations.
 
-### Does X-Captcha-React support multiple languages?
-Yes, the library currently supports English and Russian with automatic detection based on the user's browser settings. You can also manually specify the language.
+### What languages are supported?
+X-Captcha-React supports over 30 languages out of the box, including English, Spanish, French, German, Russian, Chinese, Japanese, Arabic, and many more. The language can be automatically detected from the user's browser settings or explicitly specified.
 
-### How do I verify the CAPTCHA token on my server?
-After a user completes the CAPTCHA, you'll receive a token that should be sent to your server along with the form data. Your server should then verify this token with the X-Captcha API to confirm it's valid.
-
-### Does X-Captcha-React work with server-side rendering (SSR)?
-The library is primarily designed for client-side rendering. For SSR applications like Next.js, you'll need to ensure the CAPTCHA components are only rendered on the client side.
-
-### Can I use X-Captcha-React with form libraries like Formik or React Hook Form?
-Yes, the library is designed to work seamlessly with popular form libraries. Examples are provided in the documentation.
+### How do I verify the captcha token on my server?
+After a user completes the captcha, your application receives a token. You should send this token to your backend for validation using the X-Captcha verification API before processing the form submission.
 
 ## 🔒 License
 This project is licensed under **MIT License
