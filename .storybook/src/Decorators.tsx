@@ -1,5 +1,5 @@
 /* eslint-disable @elsikora/typescript/no-magic-numbers */
-import type { CaptchaClient } from "@elsikora/x-captcha-client";
+import type { XCaptchaApiClient } from "@elsikora/x-captcha-client";
 import type { Decorator, ReactRenderer, StrictArgs } from "@storybook/react";
 import type { StoryContext, StoryContextUpdate } from "@storybook/types";
 import type { ReactElement } from "react";
@@ -56,15 +56,16 @@ export const withMockCaptchaClient = (
 
 		// Mock the CaptchaClient before rendering
 		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-		const originalCaptchaClient: CaptchaClient = (globalThis as any).CaptchaClient as CaptchaClient;
+		const originalCaptchaClient: XCaptchaApiClient = (globalThis as any).XCaptchaApiClient as XCaptchaApiClient;
 
 		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-		(globalThis as any).CaptchaClient = MockCaptchaClient;
+		(globalThis as any).XCaptchaApiClient = MockCaptchaClient;
 		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
 		(globalThis as any).CaptchaClientOptions = {
-			apiUrl,
+			baseUrl: apiUrl,
 			publicKey,
 			responseDelay: options.responseDelay ?? RESPONSE_DELAYS.DEFAULT,
+			secretKey: "",
 			shouldSucceed: options.shouldSucceed ?? true,
 			shouldTimeout: options.shouldTimeout ?? false,
 		};
@@ -76,7 +77,7 @@ export const withMockCaptchaClient = (
 		React.useEffect(() => {
 			return (): void => {
 				// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-				(globalThis as any).CaptchaClient = originalCaptchaClient;
+				(globalThis as any).XCaptchaApiClient = originalCaptchaClient;
 				// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
 				delete (globalThis as any).CaptchaClientOptions;
 			};

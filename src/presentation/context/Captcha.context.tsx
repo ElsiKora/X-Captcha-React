@@ -1,7 +1,7 @@
 /* eslint-disable @elsikora/react/1/no-use-context */
 import type { ICaptchaContext, ICaptchaProviderProperties, ILanguage } from "../interface";
 
-import { CaptchaClient } from "@elsikora/x-captcha-client";
+import { XCaptchaApiClient } from "@elsikora/x-captcha-client";
 import React, { createContext, useContext, useMemo } from "react";
 
 import { createTranslator, detectLanguage } from "../i18n";
@@ -28,12 +28,12 @@ export const CaptchaProvider: React.FC<ICaptchaProviderProperties> = ({ apiUrl, 
 	}, [language]);
 
 	// Create a memoized client instance to avoid unnecessary re-renders
-	const client: CaptchaClient | null = useMemo(() => {
+	const client: null | XCaptchaApiClient = useMemo(() => {
 		if (!publicKey) {
 			return null;
 		}
 
-		return new CaptchaClient({ apiUrl, publicKey });
+		return new XCaptchaApiClient({ apiKey: publicKey, baseUrl: apiUrl, secretKey: "" });
 	}, [apiUrl, publicKey]);
 
 	// If publicKey is missing, render an error message in captcha error style

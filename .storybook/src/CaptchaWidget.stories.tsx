@@ -5,8 +5,9 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "@storybook/test";
 
 import { CaptchaWidget } from "../../src";
+import { EChallengeType } from "../../src/infrastructure/enum/challenge-type.enum";
 
-import { BACKGROUND_COLORS, CONTAINER_SIZES, DEFAULT_API_URL, DEFAULT_LANGUAGE, DEFAULT_PUBLIC_KEY, RESPONSE_DELAYS, SUPPORTED_LANGUAGES, THEME_COLORS, WIDGET_DIMENSIONS } from "./Constants";
+import { BACKGROUND_COLORS, CONTAINER_SIZES, DEFAULT_API_URL, DEFAULT_CHALLENGE_TYPE, DEFAULT_LANGUAGE, DEFAULT_POW_SOLVER_CONFIG, DEFAULT_PUBLIC_KEY, RESPONSE_DELAYS, SUPPORTED_LANGUAGES, THEME_COLORS, WIDGET_DIMENSIONS } from "./Constants";
 import { withContainer, withLanguage, withMockCaptchaClient, withThemeColor } from "./Decorators";
 
 /**
@@ -16,6 +17,7 @@ import { withContainer, withLanguage, withMockCaptchaClient, withThemeColor } fr
  */
 const meta: Meta<typeof CaptchaWidget> = {
 	args: {
+		challengeType: EChallengeType.POW,
 		publicKey: DEFAULT_PUBLIC_KEY,
 	},
 	argTypes: {
@@ -40,6 +42,15 @@ const meta: Meta<typeof CaptchaWidget> = {
 			description: "Color for the brand name text",
 			table: {
 				defaultValue: { summary: "#aaa" },
+				type: { summary: "string" },
+			},
+		},
+		challengeType: {
+			control: "select",
+			description: "Type of challenge to display",
+			options: Object.values(EChallengeType),
+			table: {
+				defaultValue: { summary: DEFAULT_CHALLENGE_TYPE },
 				type: { summary: "string" },
 			},
 		},
@@ -87,6 +98,16 @@ const meta: Meta<typeof CaptchaWidget> = {
 			description: "Callback when captcha is successfully verified",
 			table: {
 				type: { summary: "(token: string) => void" },
+			},
+		},
+		powSolver: {
+			control: "object",
+			description: "Configuration options for the PoW solver",
+			table: {
+				defaultValue: {
+					summary: `{ batchSize: ${String(DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE)}, maxAttempts: ${String(DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS)}, workerTimeout: ${String(DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT)} }`,
+				},
+				type: { summary: "IPowSolverConfig" },
 			},
 		},
 		publicKey: {
@@ -161,18 +182,21 @@ export default meta;
 export const Default: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		errorTextColor: "#d10707",
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
-
 		language: "uk",
-
 		onError: fn((error: unknown) => {
 			console.error("Captcha verification error:", error);
 		}),
-
 		onVerify: fn((token: string) => {
 			console.log("Captcha verified with token:", token);
 		}),
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		publicKey: "sd3w5w35",
 		themeColor: "#f142f5",
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
@@ -186,7 +210,13 @@ export const Default: StoryObj<typeof CaptchaWidget> = {
 export const CustomSize: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.LARGE_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		publicKey: DEFAULT_PUBLIC_KEY,
 		themeColor: THEME_COLORS.BLUE,
 		width: WIDGET_DIMENSIONS.LARGE_WIDTH,
@@ -200,8 +230,14 @@ export const CustomSize: StoryObj<typeof CaptchaWidget> = {
 export const GreenTheme: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
 		language: "uk",
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		themeColor: THEME_COLORS.GREEN,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
@@ -215,7 +251,13 @@ export const CustomBackground: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
 		backgroundColor: BACKGROUND_COLORS.LIGHT_BLUE,
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		themeColor: THEME_COLORS.BLUE,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
@@ -229,7 +271,13 @@ export const DarkTheme: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
 		backgroundColor: BACKGROUND_COLORS.DARK,
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: 1000,
+			maxAttempts: 1,
+			workerTimeout: 30_000,
+		},
 		themeColor: THEME_COLORS.PURPLE,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
@@ -243,7 +291,13 @@ export const CustomBrandColor: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
 		brandNameColor: "#3366ff",
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		themeColor: THEME_COLORS.BLUE,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
@@ -256,7 +310,13 @@ export const CustomBrandColor: StoryObj<typeof CaptchaWidget> = {
 export const HiddenBrandName: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		shouldShowBrandName: false,
 		themeColor: THEME_COLORS.BLUE,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
@@ -270,8 +330,14 @@ export const HiddenBrandName: StoryObj<typeof CaptchaWidget> = {
 export const CustomCheckmark: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		checkmarkColor: "#ffcc00",
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		themeColor: THEME_COLORS.BLUE,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
@@ -303,8 +369,14 @@ export const CustomCheckmark: StoryObj<typeof CaptchaWidget> = {
 export const CustomErrorStyling: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		errorTextColor: "#e91e63",
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		themeColor: THEME_COLORS.BLUE,
 		tryAgainButtonBackgroundColor: "#e0e0e0",
 		tryAgainButtonTextColor: "#333333",
@@ -333,12 +405,56 @@ export const CustomErrorStyling: StoryObj<typeof CaptchaWidget> = {
 };
 
 /**
+ * CaptchaWidget with faster PoW solver.
+ */
+export const FastPowSolver: StoryObj<typeof CaptchaWidget> = {
+	args: {
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: 500,
+			maxAttempts: 1_000_000,
+			workerTimeout: 60_000,
+		},
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
+	},
+	decorators: [
+		withMockCaptchaClient({
+			responseDelay: RESPONSE_DELAYS.LONG,
+			shouldSucceed: true,
+		}),
+		withLanguage(DEFAULT_LANGUAGE),
+		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
+		withThemeColor(THEME_COLORS.BLUE),
+	],
+	play: ({ canvasElement }: any) => {
+		// Simulate user clicking on the captcha
+		const canvas: HTMLElement = canvasElement as HTMLElement;
+		const captchaContainer: Element | null = canvas.querySelector(".x-captcha-container");
+
+		if (captchaContainer) {
+			setTimeout(() => {
+				(captchaContainer as HTMLElement).click();
+			}, 1000);
+		}
+	},
+};
+
+/**
  * Simulates a successful verification response from the server.
  */
 export const SuccessfulVerification: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		themeColor: THEME_COLORS.BLUE,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
@@ -370,7 +486,13 @@ export const SuccessfulVerification: StoryObj<typeof CaptchaWidget> = {
 export const FailedVerification: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		themeColor: THEME_COLORS.BLUE,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
@@ -402,7 +524,13 @@ export const FailedVerification: StoryObj<typeof CaptchaWidget> = {
 export const SlowNetwork: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		themeColor: THEME_COLORS.BLUE,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
@@ -423,8 +551,14 @@ export const SlowNetwork: StoryObj<typeof CaptchaWidget> = {
 export const RussianLanguage: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
 		language: "ru",
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		themeColor: THEME_COLORS.BLUE,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
@@ -437,7 +571,13 @@ export const RussianLanguage: StoryObj<typeof CaptchaWidget> = {
 export const NetworkTimeout: StoryObj<typeof CaptchaWidget> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.POW,
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		powSolver: {
+			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
+			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
+			workerTimeout: DEFAULT_POW_SOLVER_CONFIG.WORKER_TIMEOUT,
+		},
 		themeColor: THEME_COLORS.BLUE,
 		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
 	},
@@ -445,6 +585,28 @@ export const NetworkTimeout: StoryObj<typeof CaptchaWidget> = {
 		withMockCaptchaClient({
 			responseDelay: RESPONSE_DELAYS.LONG,
 			shouldTimeout: true,
+		}),
+		withLanguage(DEFAULT_LANGUAGE),
+		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
+		withThemeColor(THEME_COLORS.BLUE),
+	],
+};
+
+/**
+ * CaptchaWidget with click challenge type.
+ */
+export const ClickChallenge: StoryObj<typeof CaptchaWidget> = {
+	args: {
+		apiUrl: DEFAULT_API_URL,
+		challengeType: EChallengeType.CLICK,
+		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
+		themeColor: THEME_COLORS.BLUE,
+		width: WIDGET_DIMENSIONS.DEFAULT_WIDTH,
+	},
+	decorators: [
+		withMockCaptchaClient({
+			responseDelay: RESPONSE_DELAYS.DEFAULT,
+			shouldSucceed: true,
 		}),
 		withLanguage(DEFAULT_LANGUAGE),
 		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),

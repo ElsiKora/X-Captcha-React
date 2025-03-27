@@ -1,13 +1,16 @@
-/* eslint-disable @elsikora/typescript/no-magic-numbers */
-import type { IChallenge, IChallengeSolveResponse } from "@elsikora/x-captcha-client";
+import type { ChallengeCreateResponse, ChallengeSolveResponse } from "@elsikora/x-captcha-client/api";
 import type { CSSProperties, Dispatch, SetStateAction } from "react";
 
+import type { IPowSolverSolution } from "../../infrastructure/interface/pow-solver/solution.interface";
 import type { ICaptchaWidgetProperties } from "../interface";
 import type { TTranslateFunction } from "../type";
 
-import { CaptchaClient, ECaptchaType } from "@elsikora/x-captcha-client";
+import { XCaptchaApiClient } from "@elsikora/x-captcha-client";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
+import { EChallengeType } from "../../infrastructure/enum/challenge-type.enum";
+import { PowSolver } from "../../infrastructure/utility/pow-solver.utility";
+import CAPTCHA_WIDGET_CONSTANT from "../constant/captcha-widget.constant";
 import { createTranslator, detectLanguage } from "../i18n";
 import { GenerateThemeVariables } from "../utility";
 
@@ -18,19 +21,15 @@ import styles from "../styles/captcha-widget.module.css";
  * @param {ICaptchaWidgetProperties} props - The properties
  * @returns {React.ReactElement} The captcha widget
  */
-export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, backgroundColor, brandNameColor, checkmarkColor, errorTextColor, height = 74, language, onError, onVerify, publicKey, shouldShowBrandName = true, themeColor = "#4285F4", tryAgainButtonBackgroundColor, tryAgainButtonTextColor, width = 300 }: ICaptchaWidgetProperties): React.ReactElement => {
+export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, backgroundColor, brandNameColor, challengeType, checkmarkColor, errorTextColor, height = CAPTCHA_WIDGET_CONSTANT.BOX_HEIGHT, language, onError, onVerify, powSolver, publicKey, shouldShowBrandName = true, themeColor = "#4285F4", tryAgainButtonBackgroundColor, tryAgainButtonTextColor, width = CAPTCHA_WIDGET_CONSTANT.BOX_WIDTH }: ICaptchaWidgetProperties): React.ReactElement => {
 	// Check if publicKey is provided
 	const isMissingPublicKey: boolean = !publicKey;
 
 	// eslint-disable-next-line @elsikora/react/1/naming-convention/use-state
-	const [client]: [CaptchaClient | null, Dispatch<SetStateAction<CaptchaClient | null>>] = useState<CaptchaClient | null>(() => {
-		if (!publicKey) {
-			return null;
-		}
-
-		return new CaptchaClient({ apiUrl, publicKey });
+	const [client]: [XCaptchaApiClient, Dispatch<SetStateAction<XCaptchaApiClient>>] = useState<XCaptchaApiClient>(() => {
+		return new XCaptchaApiClient({ apiKey: publicKey, baseUrl: apiUrl, secretKey: "" });
 	});
-	const [challenge, setChallenge]: [IChallenge | null, Dispatch<SetStateAction<IChallenge | null>>] = useState<IChallenge | null>(null);
+	const [challenge, setChallenge]: [ChallengeCreateResponse | null, Dispatch<SetStateAction<ChallengeCreateResponse | null>>] = useState<ChallengeCreateResponse | null>(null);
 	const [isLoading, setIsLoading]: [boolean, Dispatch<SetStateAction<boolean>>] = useState<boolean>(true);
 	const [isVerifying, setIsVerifying]: [boolean, Dispatch<SetStateAction<boolean>>] = useState<boolean>(false);
 	const [isVerified, setIsVerified]: [boolean, Dispatch<SetStateAction<boolean>>] = useState<boolean>(false);
@@ -46,7 +45,6 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 		return createTranslator(detectedLanguage);
 	});
 
-	// Generate CSS variables from theme props
 	const themeVariables: CSSProperties = useMemo<CSSProperties>(
 		() =>
 			GenerateThemeVariables({
@@ -61,31 +59,25 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 		[backgroundColor, brandNameColor, checkmarkColor, errorTextColor, themeColor, tryAgainButtonBackgroundColor, tryAgainButtonTextColor],
 	);
 
-	// Load a new challenge with smooth transition
 	const loadChallenge: () => Promise<void> = useCallback(async () => {
 		try {
-			// Start with loading state and clear error
 			setIsLoading(true);
 			setError(null);
 
-			// Add a minimum load time for smooth transitions
-			const minLoadTime: number = 800; // milliseconds
 			const startTime: number = Date.now();
 
-			// Load the actual challenge
-			const newChallenge: IChallenge = await client.createChallenge(ECaptchaType.CLICK);
+			const newChallenge: ChallengeCreateResponse | undefined = await client.challenge.create({ type: challengeType });
 
-			// Calculate remaining time to meet minimum load time
 			const elapsedTime: number = Date.now() - startTime;
-			const remainingTime: number = Math.max(0, minLoadTime - elapsedTime);
+			const remainingTime: number = Math.max(0, CAPTCHA_WIDGET_CONSTANT.LOADING_FAKE_DELAY - elapsedTime);
 
-			// Add artificial delay if needed for smoother UX
 			if (remainingTime > 0) {
-				await new Promise((resolve: (value: IChallenge | PromiseLike<IChallenge>) => void) => setTimeout(resolve, remainingTime));
+				await new Promise((resolve: (value: ChallengeCreateResponse | PromiseLike<ChallengeCreateResponse>) => void) => setTimeout(resolve, remainingTime));
 			}
 
 			setChallenge(newChallenge);
-		} catch {
+		} catch (error_) {
+			console.log("PIDOR", error_);
 			setError(translate("failedToLoadChallenge"));
 
 			if (onError) onError(translate("failedToLoadChallenge"));
@@ -94,18 +86,52 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 		}
 	}, [client, onError, translate]);
 
-	// Validate the captcha challenge
-	const validateCaptcha = async (challenge: IChallenge): Promise<void> => {
+	const validateCaptcha = async (challenge: ChallengeCreateResponse): Promise<void> => {
 		try {
-			const result: IChallengeSolveResponse = await client.solveChallenge(challenge.id, "click");
+			if (challenge.data.type === EChallengeType.POW) {
+				const solution: IPowSolverSolution = await PowSolver.solve(
+					{
+						difficulty: challenge.data.difficulty,
+						prefix: challenge.data.challenge,
+					},
+					powSolver,
+				);
 
-			setAnimation("success");
-			setHasFakeDelay(false);
-			setIsVerified(true);
-			setTimeout(() => {
-				if (onVerify && result.token) onVerify(result.token);
-			}, 300);
-		} catch {
+				const result: ChallengeSolveResponse = await client.challenge.solve(challenge.id, {
+					solution: {
+						hash: solution.hash,
+						nonce: solution.nonce,
+						type: EChallengeType.POW,
+					},
+				});
+
+				setAnimation("success");
+				setHasFakeDelay(false);
+				setIsVerified(true);
+				setTimeout(() => {
+					if (onVerify) onVerify(result.token);
+				}, CAPTCHA_WIDGET_CONSTANT.ON_VERIFY_DELAY);
+				// eslint-disable-next-line @elsikora/typescript/no-unsafe-enum-comparison
+			} else if (challenge.data.type === EChallengeType.CLICK) {
+				const result: ChallengeSolveResponse = await client.challenge.solve(challenge.id, {
+					solution: {
+						// eslint-disable-next-line @elsikora/typescript/naming-convention
+						data: true,
+						type: EChallengeType.CLICK,
+					},
+				});
+
+				setAnimation("success");
+				setHasFakeDelay(false);
+				setIsVerified(true);
+				setTimeout(() => {
+					if (onVerify) onVerify(result.token);
+				}, CAPTCHA_WIDGET_CONSTANT.ON_VERIFY_DELAY);
+			} else {
+				throw new Error("Invalid challenge type or missing data");
+			}
+		} catch (error) {
+			console.error("Verification error:", error);
 			setAnimation("error");
 			setTimeout((): void => {
 				setAnimation("none");
@@ -114,11 +140,11 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 
 				if (onError) onError(translate("errorDuringVerification"));
 				void loadChallenge();
-			}, 500);
+			}, CAPTCHA_WIDGET_CONSTANT.RETRY_DELAY);
 		} finally {
 			setTimeout(() => {
 				setIsVerifying(false);
-			}, 500);
+			}, CAPTCHA_WIDGET_CONSTANT.RETRY_DELAY);
 		}
 	};
 
@@ -127,20 +153,16 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 		if (!challenge || isVerified || isVerifying) return;
 
 		try {
-			// Start loading state and delay verification for perceived security
 			setIsVerifying(true);
 			setAnimation("verifying");
 			setHasFakeDelay(true);
 
-			// Add artificial delay for better UX
 			setTimeout((): void => {
-				// Run the async function without creating another level of nesting
 				void validateCaptcha(challenge).catch((error: unknown) => {
 					console.error("Unexpected error:", error);
 				});
-			}, 1500);
+			}, CAPTCHA_WIDGET_CONSTANT.VERIFY_FAKE_DELAY);
 		} catch {
-			// Error handling code remains as before
 			setAnimation("error");
 			setHasFakeDelay(false);
 			setTimeout((): void => {
@@ -149,23 +171,20 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 
 				if (onError) onError(translate("errorDuringVerification"));
 				void loadChallenge();
-			}, 500);
+			}, CAPTCHA_WIDGET_CONSTANT.RETRY_DELAY);
 			setTimeout(() => {
 				setIsVerifying(false);
-			}, 500);
+			}, CAPTCHA_WIDGET_CONSTANT.RETRY_DELAY);
 		}
 	}, [challenge, client, loadChallenge, onError, onVerify, isVerified, isVerifying, translate]);
 
-	// Load challenge on mount if publicKey is provided
 	useEffect(() => {
 		if (client) {
 			void loadChallenge();
 		}
 	}, [loadChallenge, client]);
 
-	// Render the appropriate captcha based on type
 	const renderCaptcha = (): React.ReactElement => {
-		// Check for missing publicKey first
 		if (isMissingPublicKey) {
 			return (
 				<div className={styles["x-captcha-error"]}>
@@ -190,14 +209,11 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 					<button
 						className={styles["x-captcha-error-button"]}
 						onClick={() => {
-							// Set loading state immediately
 							setIsLoading(true);
-							// Clear error message for a clean transition
 							setError(null);
-							// Add a delay before actually loading to ensure visual transition is noticeable
 							setTimeout(() => {
 								void loadChallenge();
-							}, 300);
+							}, CAPTCHA_WIDGET_CONSTANT.RETRY_DELAY);
 						}}
 						type={"button"}>
 						<span className={styles["x-captcha-error-button-icon"]}>
@@ -229,10 +245,40 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 			return <div className={styles["x-captcha-error"]}>{translate("noChallenge")}</div>;
 		}
 
-		// Render based on challenge type
-		// eslint-disable-next-line @elsikora/sonar/no-small-switch
-		switch (challenge.type) {
-			case ECaptchaType.CLICK: {
+		switch (challenge.type as EChallengeType) {
+			case EChallengeType.CLICK: {
+				return (
+					// eslint-disable-next-line @elsikora/jsx/click-events-have-key-events,@elsikora/jsx/no-static-element-interactions
+					<div className={styles["x-captcha-container"]} onClick={handleClick}>
+						<div className={`${styles["x-captcha-checkbox"]} ${isVerifying ? styles["x-captcha-checkbox-verifying"] : ""} ${animation === "error" ? styles["x-captcha-checkbox-error"] : ""}`}>
+							{isVerified && (
+								<svg className={`${styles["x-captcha-checkmark"]} ${isVerified ? styles["x-captcha-checkmark-visible"] : ""}`} fill={"none"} height={"16"} stroke={"currentColor"} strokeLinecap={"round"} strokeLinejoin={"round"} strokeWidth={"3"} viewBox={"0 0 24 24"} width={"16"} xmlns={"http://www.w3.org/2000/svg"}>
+									<polyline points={"20 6 9 17 4 12"} />
+								</svg>
+							)}
+							<div
+								className={`${styles["x-captcha-pulse"]} ${isVerifying ? styles["x-captcha-pulse-active"] : ""}`}
+								style={{
+									animation: animation === "verifying" ? "x-captcha-pulse 0.8s ease-out" : "none",
+								}}
+							/>
+						</div>
+						<div className={styles["x-captcha-text"]}>{translate("notRobot")}</div>
+						{shouldShowBrandName && <div className={styles["x-captcha-brand"]}>{translate("brandName")}</div>}
+
+						{/* Verifying overlay with loading animation */}
+						<div className={`${styles["x-captcha-verifying-overlay"]} ${hasFakeDelay ? styles["x-captcha-verifying-overlay-visible"] : ""}`}>
+							<div className={styles["x-captcha-loading"]}>
+								<div className={styles["x-captcha-loading-spinner"]} />
+								<span>{translate("verifying")}</span>
+							</div>
+						</div>
+					</div>
+				);
+			}
+
+			// eslint-disable-next-line @elsikora/sonar/no-duplicated-branches
+			case EChallengeType.POW: {
 				return (
 					// eslint-disable-next-line @elsikora/jsx/click-events-have-key-events,@elsikora/jsx/no-static-element-interactions
 					<div className={styles["x-captcha-container"]} onClick={handleClick}>
