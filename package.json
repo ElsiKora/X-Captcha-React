@@ -1,6 +1,6 @@
 {
 	"name": "@elsikora/x-captcha-react",
-	"version": "2.0.0-dev.1",
+	"version": "2.0.0",
 	"description": "React components for X-Captcha service",
 	"keywords": [
 		"captcha",
