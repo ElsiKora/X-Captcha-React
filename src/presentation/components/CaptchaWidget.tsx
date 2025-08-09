@@ -21,7 +21,7 @@ import styles from "../styles/captcha-widget.module.css";
  * @param {ICaptchaWidgetProperties} props - The properties
  * @returns {React.ReactElement} The captcha widget
  */
-export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, backgroundColor, brandNameColor, challengeType, checkmarkColor, errorTextColor, height = CAPTCHA_WIDGET_CONSTANT.BOX_HEIGHT, language, onError, onVerify, powSolver, publicKey, shouldShowBrandName = true, themeColor = "#4285F4", tryAgainButtonBackgroundColor, tryAgainButtonTextColor, width = CAPTCHA_WIDGET_CONSTANT.BOX_WIDTH }: ICaptchaWidgetProperties): React.ReactElement => {
+export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, backgroundColor, brandNameColor, challengeType, checkmarkColor, errorTextColor, height = CAPTCHA_WIDGET_CONSTANT.BOX_HEIGHT, language, onError, onLoaded, onVerify, powSolver, publicKey, shouldShowBrandName = true, themeColor = "#4285F4", tryAgainButtonBackgroundColor, tryAgainButtonTextColor, width = CAPTCHA_WIDGET_CONSTANT.BOX_WIDTH }: ICaptchaWidgetProperties): React.ReactElement => {
 	// Check if publicKey is provided
 	const isMissingPublicKey: boolean = !publicKey;
 
@@ -76,15 +76,16 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 			}
 
 			setChallenge(newChallenge);
-		} catch (error_) {
-			console.log("PIDOR", error_);
+
+			if (newChallenge && onLoaded) onLoaded(newChallenge);
+		} catch {
 			setError(translate("failedToLoadChallenge"));
 
 			if (onError) onError(translate("failedToLoadChallenge"));
 		} finally {
 			setIsLoading(false);
 		}
-	}, [client, onError, translate]);
+	}, [client, onError, onLoaded, translate, challengeType]);
 
 	const validateCaptcha = async (challenge: ChallengeCreateResponse): Promise<void> => {
 		try {
@@ -115,7 +116,6 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 			} else if (challenge.data.type === EChallengeType.CLICK) {
 				const result: ChallengeSolveResponse = await client.challenge.solve(challenge.id, {
 					solution: {
-						// eslint-disable-next-line @elsikora/typescript/naming-convention
 						data: true,
 						type: EChallengeType.CLICK,
 					},

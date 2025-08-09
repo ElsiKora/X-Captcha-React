@@ -1,4 +1,3 @@
-/* eslint-disable @elsikora/i18next/no-literal-string,@elsikora/typescript/no-magic-numbers */
 import type { IEmaiFieldProperties, IPasswordFieldProperties, ITextAreaFieldProperties, ITextFieldProperties } from "../interface";
 
 import React from "react";

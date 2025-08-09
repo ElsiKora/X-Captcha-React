@@ -1,8 +1,7 @@
-/* eslint-disable @elsikora/typescript/no-magic-numbers */
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { fn } from "@storybook/test";
 import React from "react";
+import { fn } from "storybook/test";
 
 import { CaptchaForm } from "../../src";
 
@@ -131,9 +130,7 @@ export default meta;
 export const Default: StoryObj<typeof CaptchaForm> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
-		onSubmit: fn((token: string) => {
-			console.log("Form submitted with token:", token);
-		}),
+		onSubmit: fn(),
 		submitButtonText: SUBMIT_BUTTON_TEXT.DEFAULT,
 		themeColor: THEME_COLORS.BLUE,
 	},

@@ -88,8 +88,8 @@ export const PowSolver: { solve(challengeData: IPowSolverChallenge, config?: IPo
 
 		const worker: Worker = new Worker(workerUrl);
 
-		return new Promise((resolve: (value: IPowSolverSolution | PromiseLike<IPowSolverSolution>) => void, reject: (reason?: any) => void) => {
-			const timeout: any = setTimeout(() => {
+		return new Promise((resolve: (value: IPowSolverSolution | PromiseLike<IPowSolverSolution>) => void, reject: (reason?: unknown) => void) => {
+			const timeout = setTimeout(() => {
 				worker.terminate();
 				// eslint-disable-next-line @elsikora/node/no-unsupported-features/node-builtins
 				URL.revokeObjectURL(workerUrl);
@@ -100,7 +100,6 @@ export const PowSolver: { solve(challengeData: IPowSolverChallenge, config?: IPo
 				const { error, solution, status }: { error: string; solution: IPowSolverSolution; status: EPowSolverWorkerStatus } = event.data;
 
 				if (status === EPowSolverWorkerStatus.SUCCESS) {
-					// eslint-disable-next-line @elsikora/typescript/no-unsafe-argument
 					clearTimeout(timeout);
 					worker.terminate();
 					// eslint-disable-next-line @elsikora/node/no-unsupported-features/node-builtins
@@ -108,7 +107,6 @@ export const PowSolver: { solve(challengeData: IPowSolverChallenge, config?: IPo
 
 					resolve(solution);
 				} else if (status === EPowSolverWorkerStatus.FAILED) {
-					// eslint-disable-next-line @elsikora/typescript/no-unsafe-argument
 					clearTimeout(timeout);
 					worker.terminate();
 					// eslint-disable-next-line @elsikora/node/no-unsupported-features/node-builtins
