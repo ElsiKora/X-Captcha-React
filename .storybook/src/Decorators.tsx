@@ -1,9 +1,9 @@
-/* eslint-disable @elsikora/typescript/no-magic-numbers */
 import type { XCaptchaApiClient } from "@elsikora/x-captcha-client";
 import type { Decorator, ReactRenderer, StrictArgs } from "@storybook/react";
-import type { StoryContext, StoryContextUpdate } from "@storybook/types";
 import type { ReactElement } from "react";
+import type { StoryContext, StoryContextUpdate } from "storybook/internal/types";
 
+import type { MockCaptchaClientOptions } from "./mocks";
 import type { TFormSubmitHandler } from "./type";
 
 import React from "react";
@@ -11,17 +11,33 @@ import React from "react";
 import { CONTAINER_SIZES, DEFAULT_API_URL, DEFAULT_LANGUAGE, DEFAULT_PUBLIC_KEY, RESPONSE_DELAYS, SUPPORTED_LANGUAGES, THEME_COLORS } from "./Constants";
 import { MockCaptchaClient, mockFormHandlers } from "./mocks";
 
+interface CustomGlobalThis {
+	CaptchaClientOptions?: MockCaptchaClientOptions;
+	XCaptchaApiClient?: typeof XCaptchaApiClient;
+}
+
+interface StoryArguments {
+	apiUrl?: string;
+	backgroundColor?: string;
+	language?: string;
+	onSubmit?: TFormSubmitHandler;
+	onVerify?: TFormSubmitHandler;
+	publicKey?: string;
+	themeColor?: string;
+}
+
 /**
  * Decorator to provide language selection
  * @param {string} languageCode - The language code to use
  * @returns {Decorator} A decorator function
  */
 export const withLanguage = (languageCode: string = DEFAULT_LANGUAGE): Decorator => {
-	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"], context: StoryContext<ReactRenderer, StrictArgs>) => {
 		// Allow overriding the language from Story args
 
-		const effectiveLanguage: string = (context.args?.language as string) ?? languageCode;
+		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access,@elsikora/typescript/no-explicit-any
+		const storyArguments = (context as any).args as StoryArguments;
+		const effectiveLanguage: string = storyArguments?.language ?? languageCode;
 
 		const language: string = SUPPORTED_LANGUAGES.includes(effectiveLanguage) ? effectiveLanguage : DEFAULT_LANGUAGE;
 
@@ -48,20 +64,18 @@ export const withMockCaptchaClient = (
 		shouldTimeout?: boolean;
 	} = {},
 ): Decorator => {
-	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"], context: StoryContext<ReactRenderer, StrictArgs>) => {
 		// Create a mock client for the story
-		const apiUrl: string = (context.args.apiUrl as string) ?? DEFAULT_API_URL;
-		const publicKey: string = (context.args.publicKey as string) ?? DEFAULT_PUBLIC_KEY;
+		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access,@elsikora/typescript/no-explicit-any
+		const storyArguments = (context as any).args as StoryArguments;
+		const apiUrl: string = storyArguments.apiUrl ?? DEFAULT_API_URL;
+		const publicKey: string = storyArguments.publicKey ?? DEFAULT_PUBLIC_KEY;
 
 		// Mock the CaptchaClient before rendering
-		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-		const originalCaptchaClient: XCaptchaApiClient = (globalThis as any).XCaptchaApiClient as XCaptchaApiClient;
+		const originalCaptchaClient = (globalThis as unknown as CustomGlobalThis).XCaptchaApiClient;
 
-		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-		(globalThis as any).XCaptchaApiClient = MockCaptchaClient;
-		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-		(globalThis as any).CaptchaClientOptions = {
+		(globalThis as unknown as CustomGlobalThis).XCaptchaApiClient = MockCaptchaClient as unknown as typeof XCaptchaApiClient;
+		(globalThis as unknown as CustomGlobalThis).CaptchaClientOptions = {
 			baseUrl: apiUrl,
 			publicKey,
 			responseDelay: options.responseDelay ?? RESPONSE_DELAYS.DEFAULT,
@@ -76,10 +90,8 @@ export const withMockCaptchaClient = (
 		// Cleanup after unmounting
 		React.useEffect(() => {
 			return (): void => {
-				// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-				(globalThis as any).XCaptchaApiClient = originalCaptchaClient;
-				// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access
-				delete (globalThis as any).CaptchaClientOptions;
+				(globalThis as unknown as CustomGlobalThis).XCaptchaApiClient = originalCaptchaClient;
+				delete (globalThis as unknown as CustomGlobalThis).CaptchaClientOptions;
 			};
 		}, []);
 
@@ -94,7 +106,6 @@ export const withMockCaptchaClient = (
  * @returns {Decorator} A decorator function
  */
 export const withContainer = (width: number | string = CONTAINER_SIZES.DEFAULT.WIDTH, height: number | string = CONTAINER_SIZES.DEFAULT.HEIGHT): Decorator => {
-	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"]) => {
 		return (
 			<div
@@ -121,11 +132,12 @@ export const withContainer = (width: number | string = CONTAINER_SIZES.DEFAULT.W
  * @returns {Decorator} A decorator function
  */
 export const withThemeColor = (themeColor: string = THEME_COLORS.BLUE, backgroundColor?: string): Decorator => {
-	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"], context: StoryContext<ReactRenderer, StrictArgs>) => {
 		// Allow overriding the theme color and background color from Story args
-		const effectiveThemeColor: string = (context.args.themeColor as string) ?? themeColor;
-		const effectiveBackgroundColor: string | undefined = (context.args.backgroundColor as string) ?? backgroundColor;
+		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access,@elsikora/typescript/no-explicit-any
+		const storyArguments = (context as any).args as StoryArguments;
+		const effectiveThemeColor: string = storyArguments.themeColor ?? themeColor;
+		const effectiveBackgroundColor: string | undefined = storyArguments.backgroundColor ?? backgroundColor;
 
 		return (
 			<div data-background-color={effectiveBackgroundColor} data-theme-color={effectiveThemeColor}>
@@ -142,10 +154,11 @@ export const withThemeColor = (themeColor: string = THEME_COLORS.BLUE, backgroun
  * @returns {Decorator} A decorator function
  */
 export const withFormSubmission = (handlerType: "error" | "logger" | "slowError" | "success" | "successWithAlert" = "logger", customHandler?: TFormSubmitHandler): Decorator => {
-	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"], context: StoryContext<ReactRenderer, StrictArgs>) => {
 		// Set the onSubmit handler in the story args
-		context.args.onSubmit = customHandler ?? mockFormHandlers[handlerType];
+		// eslint-disable-next-line @elsikora/typescript/no-unsafe-member-access,@elsikora/typescript/no-explicit-any
+		const storyArguments = (context as any).args as StoryArguments;
+		storyArguments.onSubmit = customHandler ?? mockFormHandlers[handlerType];
 
 		return (
 			<div className={"form-submission-context"} data-handler-type={handlerType}>
@@ -160,12 +173,12 @@ export const withFormSubmission = (handlerType: "error" | "logger" | "slowError"
 						marginTop: "10px",
 						padding: "8px",
 					}}>
-					{/* eslint-disable-next-line @elsikora/i18next/no-literal-string */}
+					{}
 					{"Form submission handler: "}
 					{handlerType}
-					{/* eslint-disable-next-line @elsikora/i18next/no-literal-string */}
+					{}
 					{handlerType === "logger" && " (check browser console)"}
-					{/* eslint-disable-next-line @elsikora/i18next/no-literal-string */}
+					{}
 					{handlerType === "successWithAlert" && " (will show alert on submit)"}
 				</div>
 			</div>
@@ -194,12 +207,11 @@ export const withFormInteraction = (
 		shouldAutoVerifyCaptcha?: boolean;
 	} = options;
 
-	// eslint-disable-next-line @elsikora/typescript/naming-convention
 	return (Story: (update?: StoryContextUpdate<Partial<StrictArgs>>) => ReactRenderer["storyResult"]) => {
 		React.useEffect(() => {
 			if (shouldAutoVerifyCaptcha) {
 				// Simulate verifying the CAPTCHA after a delay
-				const timerId: any = setTimeout(() => {
+				const timerId = setTimeout(() => {
 					// eslint-disable-next-line @elsikora/javascript/no-undef
 					const captchaContainer: Element | null = document.querySelector(".x-captcha-container");
 
@@ -222,7 +234,6 @@ export const withFormInteraction = (
 				}, 1000);
 
 				return (): void => {
-					// eslint-disable-next-line @elsikora/typescript/no-unsafe-argument
 					clearTimeout(timerId);
 				};
 			}

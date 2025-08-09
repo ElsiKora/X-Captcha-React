@@ -1,4 +1,3 @@
-/* eslint-disable @elsikora/typescript/no-magic-numbers */
 import type { CSSProperties } from "react";
 
 import type { ICaptchaThemeProperties } from "../interface";

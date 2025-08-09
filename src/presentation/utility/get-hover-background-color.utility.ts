@@ -1,5 +1,3 @@
-/* eslint-disable @elsikora/typescript/no-magic-numbers */
-
 /**
  * Calculate hover background color for a button
  * @param {string} baseColor - Base color to darken
