@@ -53,7 +53,7 @@ export interface ICaptchaWidgetProperties {
 	/**
 	 * Callback called when a challenge is successfully loaded
 	 */
-	onLoaded?: (challenge: ChallengeCreateResponse) => void;
+	onLoad?: (challenge: ChallengeCreateResponse) => void;
 
 	/**
 	 * Callback called when captcha is successfully verified
