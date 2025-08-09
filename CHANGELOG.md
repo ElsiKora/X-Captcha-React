@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/ElsiKora/X-Captcha-React/compare/v2.0.2...v2.0.3) (2025-08-09)
+
+
+### Bug Fixes
+
+* **captcha:** prevent stale callback references in captchawidget component ([ecd94bd](https://github.com/ElsiKora/X-Captcha-React/commit/ecd94bd9e8f811ab92350effbed31b7277fde22c))
+
 ## [2.0.2](https://github.com/ElsiKora/X-Captcha-React/compare/v2.0.1...v2.0.2) (2025-08-09)
 
 ## [2.0.1](https://github.com/ElsiKora/X-Captcha-React/compare/v2.0.0...v2.0.1) (2025-08-09)
