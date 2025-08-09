@@ -21,7 +21,7 @@ import styles from "../styles/captcha-widget.module.css";
  * @param {ICaptchaWidgetProperties} props - The properties
  * @returns {React.ReactElement} The captcha widget
  */
-export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, backgroundColor, brandNameColor, challengeType, checkmarkColor, errorTextColor, height = CAPTCHA_WIDGET_CONSTANT.BOX_HEIGHT, language, onError, onLoaded, onVerify, powSolver, publicKey, shouldShowBrandName = true, themeColor = "#4285F4", tryAgainButtonBackgroundColor, tryAgainButtonTextColor, width = CAPTCHA_WIDGET_CONSTANT.BOX_WIDTH }: ICaptchaWidgetProperties): React.ReactElement => {
+export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, backgroundColor, brandNameColor, challengeType, checkmarkColor, errorTextColor, height = CAPTCHA_WIDGET_CONSTANT.BOX_HEIGHT, language, onError, onLoad, onVerify, powSolver, publicKey, shouldShowBrandName = true, themeColor = "#4285F4", tryAgainButtonBackgroundColor, tryAgainButtonTextColor, width = CAPTCHA_WIDGET_CONSTANT.BOX_WIDTH }: ICaptchaWidgetProperties): React.ReactElement => {
 	// Check if publicKey is provided
 	const isMissingPublicKey: boolean = !publicKey;
 
@@ -77,7 +77,7 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 
 			setChallenge(newChallenge);
 
-			if (newChallenge && onLoaded) onLoaded(newChallenge);
+			if (newChallenge && onLoad) onLoad(newChallenge);
 		} catch {
 			setError(translate("failedToLoadChallenge"));
 
@@ -85,7 +85,7 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 		} finally {
 			setIsLoading(false);
 		}
-	}, [client, onError, onLoaded, translate, challengeType]);
+	}, [client, onError, onLoad, translate, challengeType]);
 
 	const validateCaptcha = async (challenge: ChallengeCreateResponse): Promise<void> => {
 		try {
