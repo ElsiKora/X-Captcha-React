@@ -6,7 +6,7 @@ import type { ICaptchaWidgetProperties } from "../interface";
 import type { TTranslateFunction } from "../type";
 
 import { XCaptchaApiClient } from "@elsikora/x-captcha-client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { EChallengeType } from "../../infrastructure/enum/challenge-type.enum";
 import { PowSolver } from "../../infrastructure/utility/pow-solver.utility";
@@ -36,6 +36,12 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 	const [error, setError]: [null | string, Dispatch<SetStateAction<null | string>>] = useState<null | string>(null);
 	const [animation, setAnimation]: [string, Dispatch<SetStateAction<string>>] = useState<string>("none");
 	const [hasFakeDelay, setHasFakeDelay]: [boolean, Dispatch<SetStateAction<boolean>>] = useState<boolean>(false);
+
+	// Keep latest onLoad callback without causing loadChallenge identity to change
+	const onLoadReference = useRef<typeof onLoad>(undefined);
+	useEffect(() => {
+		onLoadReference.current = onLoad;
+	}, [onLoad]);
 
 	// Determine which language to use - either from props or auto-detect
 	// eslint-disable-next-line @elsikora/react/1/naming-convention/use-state
@@ -76,8 +82,9 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 			}
 
 			setChallenge(newChallenge);
+			const callback = onLoadReference.current;
 
-			if (newChallenge && onLoad) onLoad(newChallenge);
+			if (newChallenge && callback) callback(newChallenge);
 		} catch {
 			setError(translate("failedToLoadChallenge"));
 
@@ -85,7 +92,7 @@ export const CaptchaWidget: React.FC<ICaptchaWidgetProperties> = ({ apiUrl, back
 		} finally {
 			setIsLoading(false);
 		}
-	}, [client, onError, onLoad, translate, challengeType]);
+	}, [client, onError, translate, challengeType]);
 
 	const validateCaptcha = async (challenge: ChallengeCreateResponse): Promise<void> => {
 		try {
