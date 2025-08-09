@@ -1,3 +1,5 @@
+import type { ChallengeCreateResponse } from "@elsikora/x-captcha-client/api";
+
 import type { EChallengeType } from "../../infrastructure/enum/challenge-type.enum";
 import type { IPowSolverConfig } from "../../infrastructure/interface/pow-solver/config.interface";
 
@@ -47,6 +49,11 @@ export interface ICaptchaWidgetProperties {
 	 * Callback called when captcha verification fails
 	 */
 	onError?: (error: string) => void;
+
+	/**
+	 * Callback called when a challenge is successfully loaded
+	 */
+	onLoaded?: (challenge: ChallengeCreateResponse) => void;
 
 	/**
 	 * Callback called when captcha is successfully verified

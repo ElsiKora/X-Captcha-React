@@ -1,5 +1,3 @@
-/* eslint-disable @elsikora/typescript/no-magic-numbers */
-
 import type { ChallengeCreateResponse, ChallengeSolveResponse } from "@elsikora/x-captcha-client/api";
 
 import { EChallengeType } from "../../../src/infrastructure/enum/challenge-type.enum";
@@ -36,7 +34,7 @@ export class MockCaptchaClient {
 	 * @returns {Promise<ChallengeCreateResponse>} A promise that resolves to a mock challenge
 	 */
 	public async getChallenge(): Promise<ChallengeCreateResponse> {
-		return new Promise((resolve: (value: ChallengeCreateResponse | PromiseLike<ChallengeCreateResponse>) => void, reject: (reason?: any) => void) => {
+		return new Promise((resolve: (value: ChallengeCreateResponse | PromiseLike<ChallengeCreateResponse>) => void, reject: (reason?: unknown) => void) => {
 			if (this.SHOULD_TIMEOUT) {
 				// Simulate a timeout
 				setTimeout(() => {
@@ -47,7 +45,6 @@ export class MockCaptchaClient {
 					resolve({
 						createdAt: new Date(),
 						data: {
-							// eslint-disable-next-line @elsikora/typescript/naming-convention
 							challenge: true,
 							type: EChallengeType.CLICK,
 						},
@@ -68,8 +65,8 @@ export class MockCaptchaClient {
 	 * @param {any} parameters.response - The response
 	 * @returns {Promise<ChallengeSolveResponse>} A promise that resolves to a mock validation result
 	 */
-	public async validate(parameters: { challengeId: string; response: any }): Promise<ChallengeSolveResponse> {
-		return new Promise((resolve: (value: ChallengeSolveResponse | PromiseLike<ChallengeSolveResponse>) => void, reject: (reason?: any) => void) => {
+	public async validate(parameters: { challengeId: string; response: unknown }): Promise<ChallengeSolveResponse> {
+		return new Promise((resolve: (value: ChallengeSolveResponse | PromiseLike<ChallengeSolveResponse>) => void, reject: (reason?: unknown) => void) => {
 			if (this.SHOULD_TIMEOUT) {
 				// Simulate a timeout
 				setTimeout(() => {

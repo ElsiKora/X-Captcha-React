@@ -1,4 +1,3 @@
-/* eslint-disable @elsikora/typescript/no-magic-numbers */
 import type { FormEvent } from "react";
 import type React from "react";
 
@@ -35,7 +34,7 @@ export const createLoggerHandler = (
 
 		// Log form submission info with provided token
 		if (logLevel === "info") {
-			console.info(`${logPrefix} with token: ${token}`);
+			console.error(`${logPrefix} with token: ${token}`);
 		} else if (logLevel === "warn") {
 			console.warn(`${logPrefix} with token: ${token}`);
 		} else {
@@ -70,7 +69,7 @@ export const createSuccessHandler = (
 		event.preventDefault();
 
 		// Log success message
-		console.info(`✅ ${successMessage} Token: ${token}`);
+		console.error(`✅ ${successMessage} Token: ${token}`);
 
 		// Optionally show an alert (useful for interactive stories)
 		if (shouldShowAlert) {

@@ -1,8 +1,6 @@
-/* eslint-disable @elsikora/typescript/no-magic-numbers */
-// eslint-disable-next-line @elsikora/react/1/naming-convention/filename-extension
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { fn } from "@storybook/test";
+import { fn } from "storybook/test";
 
 import { CaptchaWidget } from "../../src";
 import { EChallengeType } from "../../src/infrastructure/enum/challenge-type.enum";
@@ -186,12 +184,8 @@ export const Default: StoryObj<typeof CaptchaWidget> = {
 		errorTextColor: "#d10707",
 		height: WIDGET_DIMENSIONS.DEFAULT_HEIGHT,
 		language: "uk",
-		onError: fn((error: unknown) => {
-			console.error("Captcha verification error:", error);
-		}),
-		onVerify: fn((token: string) => {
-			console.log("Captcha verified with token:", token);
-		}),
+		onError: fn(),
+		onVerify: fn(),
 		powSolver: {
 			batchSize: DEFAULT_POW_SOLVER_CONFIG.BATCH_SIZE,
 			maxAttempts: DEFAULT_POW_SOLVER_CONFIG.MAX_ATTEMPTS,
@@ -350,14 +344,14 @@ export const CustomCheckmark: StoryObj<typeof CaptchaWidget> = {
 		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
 		withThemeColor(THEME_COLORS.BLUE),
 	],
-	play: ({ canvasElement }: any) => {
+	play: ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		// Simulate user clicking on the captcha
-		const canvas: HTMLElement = canvasElement as HTMLElement;
-		const captchaContainer: Element | null = canvas.querySelector(".x-captcha-container");
+		const canvas: HTMLElement = canvasElement;
+		const captchaContainer = canvas.querySelector(".x-captcha-container");
 
-		if (captchaContainer) {
+		if (captchaContainer instanceof HTMLElement) {
 			setTimeout(() => {
-				(captchaContainer as HTMLElement).click();
+				captchaContainer.click();
 			}, 500);
 		}
 	},
@@ -391,14 +385,14 @@ export const CustomErrorStyling: StoryObj<typeof CaptchaWidget> = {
 		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
 		withThemeColor(THEME_COLORS.BLUE),
 	],
-	play: ({ canvasElement }: any) => {
+	play: ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		// Simulate user clicking on the captcha
-		const canvas: HTMLElement = canvasElement as HTMLElement;
-		const captchaContainer: Element | null = canvas.querySelector(".x-captcha-container");
+		const canvas: HTMLElement = canvasElement;
+		const captchaContainer = canvas.querySelector(".x-captcha-container");
 
-		if (captchaContainer) {
+		if (captchaContainer instanceof HTMLElement) {
 			setTimeout(() => {
-				(captchaContainer as HTMLElement).click();
+				captchaContainer.click();
 			}, 1000);
 		}
 	},
@@ -429,14 +423,14 @@ export const FastPowSolver: StoryObj<typeof CaptchaWidget> = {
 		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
 		withThemeColor(THEME_COLORS.BLUE),
 	],
-	play: ({ canvasElement }: any) => {
+	play: ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		// Simulate user clicking on the captcha
-		const canvas: HTMLElement = canvasElement as HTMLElement;
-		const captchaContainer: Element | null = canvas.querySelector(".x-captcha-container");
+		const canvas: HTMLElement = canvasElement;
+		const captchaContainer = canvas.querySelector(".x-captcha-container");
 
-		if (captchaContainer) {
+		if (captchaContainer instanceof HTMLElement) {
 			setTimeout(() => {
-				(captchaContainer as HTMLElement).click();
+				captchaContainer.click();
 			}, 1000);
 		}
 	},
@@ -467,14 +461,14 @@ export const SuccessfulVerification: StoryObj<typeof CaptchaWidget> = {
 		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
 		withThemeColor(THEME_COLORS.BLUE),
 	],
-	play: ({ canvasElement }: any) => {
+	play: ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		// Simulate user clicking on the captcha
-		const canvas: HTMLElement = canvasElement as HTMLElement;
-		const captchaContainer: Element | null = canvas.querySelector(".x-captcha-container");
+		const canvas: HTMLElement = canvasElement;
+		const captchaContainer = canvas.querySelector(".x-captcha-container");
 
-		if (captchaContainer) {
+		if (captchaContainer instanceof HTMLElement) {
 			setTimeout(() => {
-				(captchaContainer as HTMLElement).click();
+				captchaContainer.click();
 			}, 1000);
 		}
 	},
@@ -505,14 +499,14 @@ export const FailedVerification: StoryObj<typeof CaptchaWidget> = {
 		withContainer(CONTAINER_SIZES.DEFAULT.WIDTH, CONTAINER_SIZES.DEFAULT.HEIGHT),
 		withThemeColor(THEME_COLORS.BLUE),
 	],
-	play: ({ canvasElement }: any) => {
+	play: ({ canvasElement }: { canvasElement: HTMLElement }) => {
 		// Simulate user clicking on the captcha
-		const canvas: HTMLElement = canvasElement as HTMLElement;
-		const captchaContainer: Element | null = canvas.querySelector(".x-captcha-container");
+		const canvas: HTMLElement = canvasElement;
+		const captchaContainer = canvas.querySelector(".x-captcha-container");
 
-		if (captchaContainer) {
+		if (captchaContainer instanceof HTMLElement) {
 			setTimeout(() => {
-				(captchaContainer as HTMLElement).click();
+				captchaContainer.click();
 			}, 1000);
 		}
 	},

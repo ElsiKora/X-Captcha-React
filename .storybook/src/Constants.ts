@@ -1,4 +1,3 @@
-/* eslint-disable @elsikora/typescript/no-magic-numbers */
 /**
  * Centralized constants for Storybook stories
  */
