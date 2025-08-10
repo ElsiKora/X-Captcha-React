@@ -49,6 +49,11 @@ const applyCheckbox = (variables: CSSProperties, checkbox?: ICaptchaTheme["check
 	if (!checkbox) return;
 
 	setCSSVariable(variables, "--x-captcha-checkmark", checkbox.checkmarkColor);
+	setCSSVariable(variables, "--x-captcha-checkbox-border-color", checkbox.borderColor);
+	setCSSVariable(variables, "--x-captcha-checkbox-bg", checkbox.backgroundColor);
+	setCSSVariable(variables, "--x-captcha-checkbox-radius", checkbox.borderRadius);
+	setCSSVariable(variables, "--x-captcha-checkbox-border-width", checkbox.borderWidth);
+	setCSSVariable(variables, "--x-captcha-checkbox-size", checkbox.size);
 };
 
 /**

@@ -41,10 +41,10 @@
 }
 
 .x-captcha-loading-spinner {
-	width: 20px;
-	height: 20px;
+	width: var(--x-captcha-spinner-size, 20px);
+	height: var(--x-captcha-spinner-size, 20px);
 	margin-right: 10px;
-	border: 2px solid;
+	border: var(--x-captcha-spinner-border-width, 2px) solid;
 	border-color: var(--x-captcha-spinner-border);
 	border-radius: 50%;
 	animation: x-captcha-spin 1s linear infinite;
@@ -72,8 +72,8 @@
 	font-weight: 500;
 	font-size: var(--x-captcha-font-sm);
 	background-color: var(--x-captcha-btn-bg);
-	border: 1px solid var(--x-captcha-border-light);
-	border-radius: var(--x-captcha-radius);
+	border: var(--x-captcha-btn-border-width, 1px) solid var(--x-captcha-btn-border, var(--x-captcha-border-light));
+	border-radius: var(--x-captcha-btn-radius, var(--x-captcha-radius));
 	box-shadow: var(--x-captcha-shadow-sm);
 	cursor: pointer;
 	transition: var(--x-captcha-transition-fast);
@@ -88,6 +88,7 @@
 	display: flex;
 	align-items: center;
 	margin-right: 6px;
+	color: var(--x-captcha-btn-icon, currentColor);
 }
 
 /* Verified state */
@@ -120,12 +121,12 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 24px;
-	height: 24px;
+	width: var(--x-captcha-checkbox-size, 24px);
+	height: var(--x-captcha-checkbox-size, 24px);
 	margin-right: 10px;
-	background-color: transparent;
-	border: 2px solid var(--x-captcha-primary);
-	border-radius: var(--x-captcha-radius-sm);
+	background-color: var(--x-captcha-checkbox-bg, transparent);
+	border: var(--x-captcha-checkbox-border-width, 2px) solid var(--x-captcha-checkbox-border-color, var(--x-captcha-primary));
+	border-radius: var(--x-captcha-checkbox-radius, var(--x-captcha-radius-sm));
 	box-shadow: var(--x-captcha-shadow-sm);
 	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -195,7 +196,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: var(--x-captcha-background);
+	background-color: var(--x-captcha-overlay-bg, var(--x-captcha-background));
+	color: var(--x-captcha-overlay-text, var(--x-captcha-primary));
 	border-radius: 4px;
 	visibility: hidden;
 	opacity: 0;
@@ -208,5 +210,5 @@
 
 .x-captcha-verifying-overlay-visible {
 	visibility: visible;
-	opacity: 1;
+	opacity: var(--x-captcha-overlay-opacity, 1);
 }
