@@ -28,7 +28,8 @@ X-Captcha-React provides elegant, fully customizable React components for integr
 ## 🚀 Features
 - ✨ **Multiple challenge types support (Proof of Work and Click verification)**
 - ✨ **Comprehensive internationalization with 30+ languages out-of-the-box**
-- ✨ **Complete theming with customizable colors, sizes, and animations**
+- ✨ **Complete theming with unified theme object for all visual customizations**
+- ✨ **Advanced customization for retry buttons, submit buttons, spinners, and more**
 - ✨ **Accessible design with keyboard navigation and screen reader support**
 - ✨ **Form integration with built-in validation and error handling**
 - ✨ **Optimized Web Worker implementation for Proof of Work challenges**
@@ -184,7 +185,7 @@ function LoginForm() {
 
 ## Customizing the Theme
 
-X-Captcha-React offers extensive theming options:
+X-Captcha-React offers extensive theming options through a comprehensive `theme` object:
 
 ```tsx
 import { CaptchaWidget } from '@elsikora/x-captcha-react';
@@ -197,14 +198,70 @@ function CustomThemedCaptcha() {
       publicKey="your-public-key"
       challengeType="click"
       
-      // Theme customization
-      themeColor="#6200EA"
-      backgroundColor="#F5F5F5"
-      brandNameColor="#757575"
-      checkmarkColor="#00C853"
-      errorTextColor="#D50000"
-      tryAgainButtonBackgroundColor="#E0E0E0"
-      tryAgainButtonTextColor="#424242"
+      // Complete theme customization
+      theme={{
+        colors: {
+          primary: "#6200EA",           // Main theme color
+          background: "#F5F5F5",        // Widget background
+          text: "#212121",              // Main text color
+          textLight: "#757575",         // Secondary text/brand name
+          error: "#D50000",             // Error messages
+          border: "#E0E0E0",            // Borders
+          disabled: "#9E9E9E",          // Disabled state text
+          disabledBackground: "#F5F5F5" // Disabled state background
+        },
+        checkbox: {
+          checkmarkColor: "#00C853",    // Verified checkmark
+          borderColor: "#6200EA",       // Checkbox border
+          size: "24px",                 // Checkbox size
+          borderRadius: "4px"           // Checkbox corners
+        },
+        retryButton: {
+          backgroundColor: "#E0E0E0",   // Retry button background
+          textColor: "#424242",         // Retry button text
+          hoverBackgroundColor: "#D0D0D0", // Hover state
+          iconColor: "#616161",         // Icon color
+          borderColor: "#BDBDBD",       // Button border
+          borderRadius: "6px"           // Button corners
+        },
+        submitButton: {
+          backgroundColor: "#6200EA",   // Submit button background
+          textColor: "#FFFFFF",         // Submit button text
+          hoverBackgroundColor: "#5300D5", // Hover state
+          disabledBackgroundColor: "#E0E0E0", // Disabled state
+          disabledTextColor: "#9E9E9E" // Disabled text
+        },
+        spinner: {
+          color: "#6200EA",             // Loading spinner color
+          size: "20px",                 // Spinner size
+          borderWidth: "2px"            // Spinner thickness
+        },
+        typography: {
+          fontFamily: "Inter, sans-serif", // Font family
+          fontSizeXs: "10px",           // Extra small text
+          fontSizeSm: "14px",           // Small text
+          fontSizeMd: "15px"            // Medium text
+        },
+        effects: {
+          shadowSm: "0 1px 3px rgba(0,0,0,0.08)",
+          shadow: "0 4px 6px rgba(0,0,0,0.1)",
+          shadowLg: "0 6px 12px rgba(0,0,0,0.15)",
+          transitionFast: "0.2s",
+          transitionNormal: "0.3s"
+        },
+        spacing: {
+          xs: "4px",
+          sm: "8px",
+          normal: "10px",
+          md: "16px",
+          lg: "24px"
+        },
+        borderRadius: {
+          sm: "4px",
+          normal: "6px",
+          lg: "8px"
+        }
+      }}
       
       // Size customization
       width={320}
@@ -212,6 +269,28 @@ function CustomThemedCaptcha() {
     />
   );
 }
+```
+
+### Simple Theme Example
+
+For basic customization, you can provide just the properties you want to change:
+
+```tsx
+<CaptchaWidget
+  apiUrl="https://api.x-captcha.com"
+  publicKey="your-public-key"
+  challengeType="click"
+  theme={{
+    colors: {
+      primary: "#FF5722",  // Orange theme
+      background: "#FFF3E0"
+    },
+    retryButton: {
+      backgroundColor: "#FFE0B2",
+      textColor: "#E65100"
+    }
+  }}
+/>
 ```
 
 ## Language Customization
@@ -269,6 +348,41 @@ function AdvancedPowCaptcha() {
 }
 ```
 
+## TypeScript Support
+
+X-Captcha-React is written in TypeScript and exports all necessary types:
+
+```tsx
+import type { 
+  ICaptchaWidgetProperties,
+  ICaptchaFormProperties,
+  ICaptchaTheme,
+  EChallengeType
+} from '@elsikora/x-captcha-react';
+
+// Use the types for better type safety
+const customTheme: ICaptchaTheme = {
+  colors: {
+    primary: "#2196F3",
+    background: "#FFFFFF",
+    error: "#F44336"
+  },
+  retryButton: {
+    backgroundColor: "#E3F2FD",
+    textColor: "#1976D2",
+    hoverBackgroundColor: "#BBDEFB"
+  }
+};
+
+const widgetProps: ICaptchaWidgetProperties = {
+  apiUrl: "https://api.x-captcha.com",
+  publicKey: "your-public-key",
+  challengeType: EChallengeType.CLICK,
+  theme: customTheme,
+  onVerify: (token: string) => console.log(token)
+};
+```
+
 ## 🛣 Roadmap
 | Task / Feature | Status |
 |-----------------|--------|
@@ -282,12 +396,12 @@ function AdvancedPowCaptcha() {
 | Form Validation and Error Handling | ✅ Done |
 | React Context Provider | ✅ Done |
 | TypeScript Type Definitions | ✅ Done |
+| Advanced Visual Customization (Unified Theme API) | ✅ Done |
 | Advanced Animation & Transitions | 🚧 In Progress |
 | Documentation Website | 🚧 In Progress |
 | Code Splitting for Smaller Bundle Size | 🚧 In Progress |
 | More Challenge Types Support | 🚧 In Progress |
 | Accessibility Improvements (ARIA) | 🚧 In Progress |
-| Visual Customization Options | 🚧 In Progress |
 | Server-Side Rendering Optimization | 🚧 In Progress |
 | Performance Benchmarking & Optimization | 🚧 In Progress |
 | React Native Support | 🚧 In Progress |

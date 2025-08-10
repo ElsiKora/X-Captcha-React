@@ -3,6 +3,8 @@ import type { ChallengeCreateResponse } from "@elsikora/x-captcha-client/api";
 import type { EChallengeType } from "../../infrastructure/enum/challenge-type.enum";
 import type { IPowSolverConfig } from "../../infrastructure/interface/pow-solver/config.interface";
 
+import type { ICaptchaTheme } from "./captcha-theme.interface";
+
 export interface ICaptchaWidgetProperties {
 	/**
 	 * The URL of the captcha API
@@ -10,29 +12,9 @@ export interface ICaptchaWidgetProperties {
 	apiUrl: string;
 
 	/**
-	 * Background color for the captcha widget
-	 */
-	backgroundColor?: string;
-
-	/**
-	 * Color for the brand name text
-	 */
-	brandNameColor?: string;
-
-	/**
 	 * Type of challenge to display (e.g., click, pow)
 	 */
 	challengeType: EChallengeType;
-
-	/**
-	 * Color for the checkmark when the captcha is verified
-	 */
-	checkmarkColor?: string;
-
-	/**
-	 * Color for the error text
-	 */
-	errorTextColor?: string;
 
 	/**
 	 * Height of the captcha widget
@@ -78,19 +60,10 @@ export interface ICaptchaWidgetProperties {
 	shouldShowBrandName?: boolean;
 
 	/**
-	 * Theme color for the captcha widget
+	 * Complete theme configuration for visual customization
+	 * Groups all visual properties like colors, typography, spacing, etc.
 	 */
-	themeColor?: string;
-
-	/**
-	 * Background color for the "Try Again" button
-	 */
-	tryAgainButtonBackgroundColor?: string;
-
-	/**
-	 * Text color for the "Try Again" button
-	 */
-	tryAgainButtonTextColor?: string;
+	theme?: ICaptchaTheme;
 
 	/**
 	 * Width of the captcha widget

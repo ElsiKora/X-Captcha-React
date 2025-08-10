@@ -17,7 +17,7 @@ import styles from "../styles/captcha-form.module.css";
  * @param {ICaptchaFormProperties} props - The properties
  * @returns {React.ReactElement} The captcha form
  */
-export const CaptchaForm: React.FC<ICaptchaFormProperties> = ({ apiUrl, buttonColor, children, className = "", language, onSubmit, publicKey, submitButtonText, themeColor = "#4285F4", ...captchaProperties }: ICaptchaFormProperties): React.ReactElement => {
+export const CaptchaForm: React.FC<ICaptchaFormProperties> = ({ apiUrl, children, className = "", language, onSubmit, publicKey, submitButtonText, theme, ...captchaProperties }: ICaptchaFormProperties): React.ReactElement => {
 	const [token, setToken]: [null | string, Dispatch<SetStateAction<null | string>>] = useState<null | string>(null);
 	const [error, setError]: [null | string, Dispatch<SetStateAction<null | string>>] = useState<null | string>(null);
 	const [isHovering, setIsHovering]: [boolean, Dispatch<SetStateAction<boolean>>] = useState<boolean>(false);
@@ -31,14 +31,7 @@ export const CaptchaForm: React.FC<ICaptchaFormProperties> = ({ apiUrl, buttonCo
 	});
 
 	// Generate CSS variables from theme props
-	const themeVariables: CSSProperties = useMemo<CSSProperties>(
-		() =>
-			GenerateThemeVariables({
-				buttonColor,
-				themeColor,
-			}),
-		[buttonColor, themeColor],
-	);
+	const themeVariables: CSSProperties = useMemo<CSSProperties>(() => GenerateThemeVariables(theme), [theme]);
 
 	const defaultSubmitText: string = submitButtonText ?? "Submit";
 
@@ -77,7 +70,7 @@ export const CaptchaForm: React.FC<ICaptchaFormProperties> = ({ apiUrl, buttonCo
 
 			{/* Captcha widget */}
 			<div className={styles["x-captcha-captcha-container"]}>
-				<CaptchaWidget apiUrl={apiUrl} language={language} onError={handleError} onVerify={handleVerify} publicKey={publicKey} themeColor={themeColor} {...captchaProperties} />
+				<CaptchaWidget apiUrl={apiUrl} language={language} onError={handleError} onVerify={handleVerify} publicKey={publicKey} theme={theme} {...captchaProperties} />
 			</div>
 
 			{/* Error message */}

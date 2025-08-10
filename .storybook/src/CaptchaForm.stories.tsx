@@ -27,14 +27,6 @@ const meta: Meta<typeof CaptchaForm> = {
 				type: { summary: "string" },
 			},
 		},
-		buttonColor: {
-			control: "color",
-			description: "Color for the submit button",
-			table: {
-				defaultValue: { summary: "Same as themeColor" },
-				type: { summary: "string" },
-			},
-		},
 		children: {
 			control: { type: "select" },
 			description: "Form fields to include inside the form",
@@ -95,12 +87,11 @@ const meta: Meta<typeof CaptchaForm> = {
 				type: { summary: "string" },
 			},
 		},
-		themeColor: {
-			control: "color",
-			description: "Theme color for the form",
+		theme: {
+			control: "object",
+			description: "Complete theme configuration for visual customization",
 			table: {
-				defaultValue: { summary: THEME_COLORS.BLUE },
-				type: { summary: "string" },
+				type: { summary: "ICaptchaTheme" },
 			},
 		},
 		width: {
@@ -132,7 +123,11 @@ export const Default: StoryObj<typeof CaptchaForm> = {
 		apiUrl: DEFAULT_API_URL,
 		onSubmit: fn(),
 		submitButtonText: SUBMIT_BUTTON_TEXT.DEFAULT,
-		themeColor: THEME_COLORS.BLUE,
+		theme: {
+			colors: {
+				primary: THEME_COLORS.BLUE,
+			},
+		},
 	},
 	decorators: [withFormSubmission("logger")],
 };
@@ -145,7 +140,11 @@ export const LoginForm: StoryObj<typeof CaptchaForm> = {
 		apiUrl: DEFAULT_API_URL,
 		children: <LoginFormFields />,
 		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN,
-		themeColor: THEME_COLORS.BLUE,
+		theme: {
+			colors: {
+				primary: THEME_COLORS.BLUE,
+			},
+		},
 	},
 	decorators: [withFormSubmission("success"), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
@@ -156,10 +155,16 @@ export const LoginForm: StoryObj<typeof CaptchaForm> = {
 export const ContactForm: StoryObj<typeof CaptchaForm> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
-		buttonColor: THEME_COLORS.GREEN,
 		children: <ContactFormFields />,
 		submitButtonText: SUBMIT_BUTTON_TEXT.CONTACT,
-		themeColor: THEME_COLORS.GREEN,
+		theme: {
+			colors: {
+				primary: THEME_COLORS.GREEN,
+			},
+			submitButton: {
+				backgroundColor: THEME_COLORS.GREEN,
+			},
+		},
 	},
 	decorators: [withFormSubmission("successWithAlert"), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
@@ -172,7 +177,11 @@ export const RegistrationForm: StoryObj<typeof CaptchaForm> = {
 		apiUrl: DEFAULT_API_URL,
 		children: <RegistrationFormFields />,
 		submitButtonText: SUBMIT_BUTTON_TEXT.REGISTER,
-		themeColor: THEME_COLORS.BLUE,
+		theme: {
+			colors: {
+				primary: THEME_COLORS.BLUE,
+			},
+		},
 	},
 	decorators: [withFormSubmission("success"), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
@@ -183,10 +192,16 @@ export const RegistrationForm: StoryObj<typeof CaptchaForm> = {
 export const CustomTheme: StoryObj<typeof CaptchaForm> = {
 	args: {
 		apiUrl: DEFAULT_API_URL,
-		buttonColor: THEME_COLORS.RED,
 		children: <LoginFormFields />,
 		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN,
-		themeColor: THEME_COLORS.RED,
+		theme: {
+			colors: {
+				primary: THEME_COLORS.RED,
+			},
+			submitButton: {
+				backgroundColor: THEME_COLORS.RED,
+			},
+		},
 	},
 	decorators: [withFormSubmission("logger"), withThemeColor(THEME_COLORS.RED), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
@@ -200,7 +215,11 @@ export const RussianLanguage: StoryObj<typeof CaptchaForm> = {
 		children: <LoginFormFields />,
 		language: "ru",
 		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN_RU,
-		themeColor: THEME_COLORS.BLUE,
+		theme: {
+			colors: {
+				primary: "red",
+			},
+		},
 	},
 	decorators: [withFormSubmission("logger"), withLanguage("ru"), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
@@ -213,7 +232,11 @@ export const SubmissionError: StoryObj<typeof CaptchaForm> = {
 		apiUrl: DEFAULT_API_URL,
 		children: <LoginFormFields />,
 		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN,
-		themeColor: THEME_COLORS.BLUE,
+		theme: {
+			colors: {
+				primary: THEME_COLORS.BLUE,
+			},
+		},
 	},
 	decorators: [withFormSubmission("error"), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 };
@@ -226,7 +249,11 @@ export const AutoVerification: StoryObj<typeof CaptchaForm> = {
 		apiUrl: DEFAULT_API_URL,
 		children: <LoginFormFields />,
 		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN,
-		themeColor: THEME_COLORS.BLUE,
+		theme: {
+			colors: {
+				primary: THEME_COLORS.BLUE,
+			},
+		},
 	},
 	decorators: [withFormSubmission("success"), withFormInteraction({ shouldAutoVerifyCaptcha: true }), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 	parameters: {
@@ -246,7 +273,11 @@ export const AutoSubmission: StoryObj<typeof CaptchaForm> = {
 		apiUrl: DEFAULT_API_URL,
 		children: <LoginFormFields />,
 		submitButtonText: SUBMIT_BUTTON_TEXT.LOGIN,
-		themeColor: THEME_COLORS.BLUE,
+		theme: {
+			colors: {
+				primary: THEME_COLORS.BLUE,
+			},
+		},
 	},
 	decorators: [withFormSubmission("successWithAlert"), withFormInteraction({ autoSubmitDelay: 1500, shouldAutoVerifyCaptcha: true }), withContainer(CONTAINER_SIZES.FORM.WIDTH, CONTAINER_SIZES.FORM.HEIGHT)],
 	parameters: {
