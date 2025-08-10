@@ -143,6 +143,8 @@ const applyTypography = (variables: CSSProperties, typography?: ICaptchaTheme["t
 	setCSSVariable(variables, "--x-captcha-font-xs", typography.fontSizeXs);
 	setCSSVariable(variables, "--x-captcha-font-sm", typography.fontSizeSm);
 	setCSSVariable(variables, "--x-captcha-font-md", typography.fontSizeMd);
+	setCSSVariable(variables, "--x-captcha-font-weight-normal", typography.fontWeightNormal);
+	setCSSVariable(variables, "--x-captcha-font-weight-medium", typography.fontWeightMedium);
 };
 
 /**

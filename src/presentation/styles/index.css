@@ -48,6 +48,10 @@ html,
 	--x-captcha-font-sm: 14px;
 	--x-captcha-font-md: 15px;
 
+	/* Font weights */
+	--x-captcha-font-weight-normal: 400;
+	--x-captcha-font-weight-medium: 500;
+
 	/* Font family */
 	--x-captcha-font-family: "Inter", -apple-system, blinkmacsystemfont, "Segoe UI", roboto, oxygen, ubuntu, cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 

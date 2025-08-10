@@ -37,7 +37,7 @@
 	width: 100%;
 	height: 100%;
 	color: var(--x-captcha-primary);
-	font-weight: 500;
+	font-weight: var(--x-captcha-font-weight-medium, 500);
 }
 
 .x-captcha-loading-spinner {
@@ -69,7 +69,7 @@
 	justify-content: center;
 	padding: var(--x-captcha-spacing-sm) var(--x-captcha-spacing-md);
 	color: var(--x-captcha-btn-text);
-	font-weight: 500;
+	font-weight: var(--x-captcha-font-weight-medium, 500);
 	font-size: var(--x-captcha-font-sm);
 	background-color: var(--x-captcha-btn-bg);
 	border: var(--x-captcha-btn-border-width, 1px) solid var(--x-captcha-btn-border, var(--x-captcha-border-light));
@@ -99,7 +99,7 @@
 	width: 100%;
 	height: 100%;
 	color: var(--x-captcha-primary);
-	font-weight: 500;
+	font-weight: var(--x-captcha-font-weight-medium, 500);
 }
 
 /* Container for click captcha */
@@ -174,8 +174,8 @@
 }
 
 .x-captcha-text {
-	color: var(--x-captcha-primary);
-	font-weight: 500;
+	color: var(--x-captcha-text, var(--x-captcha-primary));
+	font-weight: var(--x-captcha-font-weight-medium, 500);
 	font-size: var(--x-captcha-font-md);
 }
 
@@ -184,7 +184,7 @@
 	right: 8px;
 	bottom: 5px;
 	color: var(--x-captcha-text-light);
-	font-weight: 500;
+	font-weight: var(--x-captcha-font-weight-medium, 500);
 	font-size: var(--x-captcha-font-xs);
 }
 

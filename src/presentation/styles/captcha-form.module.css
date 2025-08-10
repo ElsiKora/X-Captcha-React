@@ -44,7 +44,7 @@
 /* Submit button styles */
 .x-captcha-submit-button {
 	padding: 0.8rem 1.5rem;
-	font-weight: 500;
+	font-weight: var(--x-captcha-font-weight-medium, 500);
 	font-size: var(--x-captcha-font-md);
 	border: none;
 	border-radius: var(--x-captcha-submit-btn-radius, var(--x-captcha-radius));
