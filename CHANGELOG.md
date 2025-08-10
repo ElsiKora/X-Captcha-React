@@ -1,3 +1,11 @@
+## [2.0.5](https://github.com/ElsiKora/X-Captcha-React/compare/v2.0.4...v2.0.5) (2025-08-10)
+
+
+### Bug Fixes
+
+* **styles:** add missing css variable mappings and font weights ([cb9631c](https://github.com/ElsiKora/X-Captcha-React/commit/cb9631c2b02b664ef616ea96bd6ec766220d2aae))
+* **styles:** fix css variables usage for theme customization ([66ffae2](https://github.com/ElsiKora/X-Captcha-React/commit/66ffae2bb690897b071c29ce4bdd60471bc2f9cf))
+
 ## [2.0.4](https://github.com/ElsiKora/X-Captcha-React/compare/v2.0.3...v2.0.4) (2025-08-10)
 
 ## [2.0.3](https://github.com/ElsiKora/X-Captcha-React/compare/v2.0.2...v2.0.3) (2025-08-09)
