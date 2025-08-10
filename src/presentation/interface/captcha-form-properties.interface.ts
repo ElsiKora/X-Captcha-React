@@ -8,11 +8,6 @@ import type { ICaptchaWidgetProperties } from "./captcha-widget-properties.inter
  */
 export interface ICaptchaFormProperties extends Omit<ICaptchaWidgetProperties, "onError" | "onVerify"> {
 	/**
-	 * Button color theme
-	 */
-	buttonColor?: string;
-
-	/**
 	 * Children elements to include in the form
 	 */
 	children?: React.ReactNode;
