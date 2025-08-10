@@ -49,6 +49,11 @@ const applyCheckbox = (variables: CSSProperties, checkbox?: ICaptchaTheme["check
 	if (!checkbox) return;
 
 	setCSSVariable(variables, "--x-captcha-checkmark", checkbox.checkmarkColor);
+	setCSSVariable(variables, "--x-captcha-checkbox-border-color", checkbox.borderColor);
+	setCSSVariable(variables, "--x-captcha-checkbox-bg", checkbox.backgroundColor);
+	setCSSVariable(variables, "--x-captcha-checkbox-radius", checkbox.borderRadius);
+	setCSSVariable(variables, "--x-captcha-checkbox-border-width", checkbox.borderWidth);
+	setCSSVariable(variables, "--x-captcha-checkbox-size", checkbox.size);
 };
 
 /**
@@ -138,6 +143,8 @@ const applyTypography = (variables: CSSProperties, typography?: ICaptchaTheme["t
 	setCSSVariable(variables, "--x-captcha-font-xs", typography.fontSizeXs);
 	setCSSVariable(variables, "--x-captcha-font-sm", typography.fontSizeSm);
 	setCSSVariable(variables, "--x-captcha-font-md", typography.fontSizeMd);
+	setCSSVariable(variables, "--x-captcha-font-weight-normal", typography.fontWeightNormal);
+	setCSSVariable(variables, "--x-captcha-font-weight-medium", typography.fontWeightMedium);
 };
 
 /**

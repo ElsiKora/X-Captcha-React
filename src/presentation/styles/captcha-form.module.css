@@ -44,10 +44,10 @@
 /* Submit button styles */
 .x-captcha-submit-button {
 	padding: 0.8rem 1.5rem;
-	font-weight: 500;
+	font-weight: var(--x-captcha-font-weight-medium, 500);
 	font-size: var(--x-captcha-font-md);
 	border: none;
-	border-radius: var(--x-captcha-radius);
+	border-radius: var(--x-captcha-submit-btn-radius, var(--x-captcha-radius));
 
 	/* eslint-disable-next-line @elsikora/css/use-baseline */
 	outline: none;
@@ -73,6 +73,7 @@
 
 /* Button interactive states */
 .x-captcha-submit-button-hover {
+	background-color: var(--x-captcha-submit-btn-hover-bg, var(--x-captcha-submit-btn-bg));
 	box-shadow: var(--x-captcha-shadow-lg);
 	transform: translateY(-2px);
 }
